@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import shyft from "@/app/adapters/shyft";
-import { getWalletBalance } from "@/app/service/getWalletBalance";
+import { getWalletBalance } from "@/app/services/getWalletBalance";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

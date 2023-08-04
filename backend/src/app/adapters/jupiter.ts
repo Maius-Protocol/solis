@@ -1,7 +1,7 @@
 import base from "@/app/adapters/base";
-import { JUPYTER_API } from "../../../env";
+import { JUPITER_PRICE_API } from "../../../env";
 
-const api = base.url(JUPYTER_API, true);
+const api = base.url(JUPITER_PRICE_API, true);
 
 export default {
   getTokenPrice: (mintAddress: string) => {
