@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import covalenthq from "@/app/adapters/covalenthq";
-
+import shyft from "@/app/adapters/shyft";
+import { getWalletBalance } from "@/app/service/getWalletBalance";
 
 export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
-    const data = await covalenthq.getTokenBalance(searchParams.get("address") || "")
+  const { searchParams } = new URL(req.url);
+  const data = await getWalletBalance(searchParams.get("address") || "");
 
-    return NextResponse.json({ data: data });
+  return NextResponse.json({ data: data });
 }
