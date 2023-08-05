@@ -4,7 +4,7 @@ import { getWalletBalance } from "@/app/services/getWalletBalance";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const data = await getWalletBalance(searchParams.get("address") || "");
+  const data = await getWalletBalance(searchParams.get("address") || "", searchParams.get("vsToken") || "");
 
   return NextResponse.json({ data: data });
 }
