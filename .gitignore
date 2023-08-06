@@ -16,3 +16,5 @@ xnft-bundle.zip
 .DS_Store
 
 /.idea
+
+.env

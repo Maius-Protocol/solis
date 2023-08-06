@@ -15,6 +15,7 @@ import {
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Screen } from "../components/Screen";
 import { TokenRow } from "../components/TokenRow";
+import { getAllVaultInfo } from "../service/meteora-vault";
 
 type RootStackParamList = {
   List: {};
@@ -44,6 +45,8 @@ function useTokenData() {
     async function fetch() {
       setLoading(true);
       const data = await fetchTokenData();
+      const data2 = await getAllVaultInfo();
+      console.log(data2);
       console.log("data", data);
       setData(data);
       setLoading(false);
