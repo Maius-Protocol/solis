@@ -1,5 +1,5 @@
 import { Screen } from "../components/Screen";
-import { VaultRow } from "../components/VaulRow";
+import { VaultRow } from "../components/VaultRow";
 import { SetStateAction, useEffect, useState } from "react";
 import { getAllVaultInfo } from "../service/meteora-vault";
 import { tokenMap } from "../constants/token";
