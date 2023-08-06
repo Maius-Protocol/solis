@@ -17,6 +17,7 @@
     "@react-navigation/native-stack": "6.6.1",
     "@react-navigation/stack": "6.2.1",
     "@solana/spl-token": "^0.3.8",
+    "@solana/spl-token-registry": "^0.2.4574",
     "@solana/web3.js": "^1.78.2",
     "antd": "^5.8.2",
     "buffer": "^6.0.3",

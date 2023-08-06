@@ -1,14 +1,15 @@
 {
   "name": "xNFT Quickstart",
   "version": "0.0.1",
-  "storage": "",
+  "storage": "ipfs",
   "description": "React Native Example",
   "website": "http://wao.gg",
   "kind": "app",
+  "tag": "nfts",
   "icon": {
     "md": "./assets/icon.png"
   },
-  "contact": "",
+  "contact": "https://github.com/Maius-Protocol",
   "screenshots": [
     "./assets/screenShot.png"
   ],

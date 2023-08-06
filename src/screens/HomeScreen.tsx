@@ -1,30 +1,54 @@
-import { Text, FlatList } from "react-native";
-import tw from "twrnc";
-
 import { Screen } from "../components/Screen";
+import { VaultRow } from "../components/VaulRow";
+import { SetStateAction, useEffect, useState } from "react";
+import { getAllVaultInfo } from "../service/meteora-vault";
+import { tokenMap } from "../constants/token";
+import { TokenRow } from "../components/TokenRow";
+import { FlatList } from "react-native";
 
 export function HomeScreen() {
-  const features = [
-    "tailwind",
-    "recoil",
-    "native styling",
-    "fetching code from an API",
-    "using a FlatList to render data",
-    "Image for both remote & local images",
-    "custom fonts",
-    "sign a transaction / message",
-    "theme hook with light/dark support",
-  ];
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any[]>([]);
+  useEffect(() => {
+    async function fetch() {
+      setLoading(true);
+      const data = await getAllVaultInfo();
+      const vaults: SetStateAction<any[]> = [];
+      data.map((vault: any) => {
+        const tokenInfo = tokenMap.find(
+          (token) => token.address === vault.token_address,
+        );
+        if (tokenInfo && vault.closest_apy > 0) {
+          vaults.push({
+            vaultInfo: vault,
+            tokenInfo: tokenInfo,
+          });
+        }
+      });
+      vaults.sort((a, b) =>
+        a.vaultInfo.closest_apy > b.vaultInfo.closest_apy ? -1 : 1,
+      );
+      setData(vaults);
+      setLoading(false);
+    }
 
+    fetch();
+  }, []);
   return (
     <Screen>
-      <Text style={tw`mb-4`}>
-        You'll find several examples of how to build xNFTs using react-native:
-      </Text>
       <FlatList
-        data={features}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => <Text>- {item}</Text>}
+        style={{ flex: 1 }}
+        data={data}
+        keyExtractor={(item) => item.vaultInfo}
+        renderItem={({ item }) => {
+          return (
+            <VaultRow
+              tokenName={item.tokenInfo.symbol}
+              tokenImage={item.tokenInfo.logoURI ?? ""}
+              apy={item.vaultInfo.closest_apy}
+            ></VaultRow>
+          );
+        }}
       />
     </Screen>
   );
