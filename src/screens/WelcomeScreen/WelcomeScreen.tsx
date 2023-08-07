@@ -13,7 +13,7 @@ const WelcomeScreen = () => {
   useEffect(() => {
     setTimeout(() => {
       navigate(RouteNames.HOME);
-    }, 300);
+    }, 1500);
   }, []);
 
   return (

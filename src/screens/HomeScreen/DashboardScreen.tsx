@@ -1,12 +1,19 @@
 import useMeteoraVaultsInfo from "../../service/useMeteoraVaultsInfo";
-import { Avatar, Divider, List, Tag, Typography } from "antd";
+import { Avatar, Card, Divider, List, Tag, Typography } from "antd";
 import { tokenMap } from "../../constants/token";
 
 const DashboardScreen = () => {
   const { data } = useMeteoraVaultsInfo();
   return (
     <div style={{ height: "100%" }}>
-      <div style={{ height: "50%" }}></div>
+      <div
+        style={{ height: "50%" }}
+        className="p-4 align-items-center justify-content-center d-flex flex-column"
+      >
+        <Card style={{ width: "100%" }}>
+          TODO: User deposited and interest goes here
+        </Card>
+      </div>
       <div
         style={{
           backgroundColor: "white",

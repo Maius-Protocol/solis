@@ -3,14 +3,68 @@ import { RouteNames } from "../../util/routes";
 import WelcomeScreen from "../WelcomeScreen/WelcomeScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../HomeScreen/HomeScreen";
+import {
+  createStackNavigator,
+  StackCardStyleInterpolator,
+} from "@react-navigation/stack";
+import { Animated } from "react-native";
+import { SolisTheme } from "../../constants/theme";
 
-const Stack = createNativeStackNavigator();
+const forSlide: StackCardStyleInterpolator = ({
+  current,
+  next,
+  inverted,
+  layouts: { screen },
+}) => {
+  const progress = Animated.add(
+    current.progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+      extrapolate: "clamp",
+    }),
+    next
+      ? next.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 1],
+          extrapolate: "clamp",
+        })
+      : 0,
+  );
+
+  return {
+    cardStyle: {
+      transform: [
+        {
+          translateX: Animated.multiply(
+            progress.interpolate({
+              inputRange: [0, 1, 2],
+              outputRange: [
+                screen.width, // Focused, but offscreen in the beginning
+                0, // Fully focused
+                screen.width * -0.3, // Fully unfocused
+              ],
+              extrapolate: "clamp",
+            }),
+            inverted,
+          ),
+        },
+      ],
+    },
+  };
+};
+
+const Stack = createStackNavigator();
 
 const NavigationScreen = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={{ contentStyle: { backgroundColor: "#F9F9F9" } }}
+        screenOptions={{
+          animationTypeForReplace: "push",
+          cardStyle: { backgroundColor: SolisTheme.background },
+          animationEnabled: true,
+          cardStyleInterpolator: forSlide,
+        }}
       >
         <Stack.Screen
           name={RouteNames.WELCOME}

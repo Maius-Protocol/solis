@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { METEORA_VAULT_INFO } from "../constants/url";
 import axios from "axios";
 import { orderBy } from "lodash";

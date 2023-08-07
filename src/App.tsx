@@ -3,9 +3,9 @@ import { RecoilRoot } from "recoil";
 import { ActivityIndicator, View } from "react-native";
 import { Raleway_300Light, useFonts } from "@expo-google-fonts/dev";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import NavigationScreen from "./screens/NavigationScreen/NavigationScreen";
-import { QueryClient, QueryClientProvider } from "react-query";
-
 const queryClient = new QueryClient();
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <NavigationScreen />
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </RecoilRoot>
   );
