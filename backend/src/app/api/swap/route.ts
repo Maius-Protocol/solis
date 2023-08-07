@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
-import shyft from "@/app/adapters/shyft";
 import { getCombinationSwapRoutes } from "@/app/services/getCombinationSwapRoutes";
+import { CombinationSwapMode, CombinationSwapRouteInput } from "@/app/types/swap";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 
   const outputAmount = parseFloat(searchParams.get("outputAmount") || "0");
 
-  const data = await getCombinationSwapRoutes(
-    searchParams.get("address") || "",
-    outputAmount,
-    searchParams.get("outputMint") || "");
+  let combinationSwapRouteInput: CombinationSwapRouteInput = {
+    walletAddress: searchParams.get("address") || "",
+    outputAmount: outputAmount,
+    outputMint: searchParams.get("outputMint") || "",
+    mode: searchParams.get("mode") == CombinationSwapMode.MANUAL ? CombinationSwapMode.MANUAL : CombinationSwapMode.AUTO
+  }
+
+  const data = await getCombinationSwapRoutes(combinationSwapRouteInput);
 
   return NextResponse.json({ data: data });
 }
