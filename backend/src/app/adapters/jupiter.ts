@@ -12,13 +12,9 @@ export default {
       .json<any>((r) => r.data);
   },
 
-  getSingleSwapRoute: (inputMint: string, outputMint: string, amount: number, slippageBps: number) => {
-    return quoteApi.url(`/quote?
-          inputMint=${inputMint}&
-          outputMint=${outputMint}&
-          amount=${amount}&
-          slippageBps=${slippageBps}`)
+  getSingleSwapRoute: (inputMint: string, outputMint: string, amount: number, swapMode: string = "ExactIn", slippageBps: number) => {
+    return quoteApi.url(`/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&swapMode=${swapMode}&slippageBps=${slippageBps}`)
       .get()
-      .json<any>((r) => r.data);
+      .json<any[]>((r) => r.data);
   }
 };
