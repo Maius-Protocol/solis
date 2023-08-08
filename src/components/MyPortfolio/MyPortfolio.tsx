@@ -2,9 +2,14 @@ import useMeteoraVaultsInfo from "../../service/useMeteoraVaultsInfo";
 import { SolisTheme } from "../../constants/theme";
 import { Avatar, Card, Divider, List, Tag, Typography } from "antd";
 import { tokenMap } from "../../constants/token";
+import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance";
+import { formatTokenAmount } from "../../util/formater";
 
 const MyPortfolio = () => {
-  const { data, isRefetching } = useMeteoraVaultsInfo();
+  const { data, isRefetching } = useUserMeteoraVaultBalance(
+    "AdN1fhqj9Jw6CyYLbxkWoSqhdwSj72k5ioEJX3RME7Dd",
+  );
+  console.log(data);
   return (
     <div
       style={{
@@ -23,9 +28,9 @@ const MyPortfolio = () => {
         itemLayout="horizontal"
         split={false}
         dataSource={data}
-        renderItem={(vault, index) => {
+        renderItem={(balance, index) => {
           const tokenInfo = tokenMap.find(
-            (token) => token.address === vault.token_address,
+            (token) => token.address === balance.token,
           );
           return (
             <List.Item style={{ padding: "4px 0" }}>
@@ -45,7 +50,12 @@ const MyPortfolio = () => {
                       {tokenInfo?.symbol}
                     </Typography.Title>
                     <Typography.Text>
-                      Deposited: {30} {tokenInfo?.symbol}
+                      Deposited:{" "}
+                      {formatTokenAmount(
+                        balance.realTokenAmount,
+                        tokenInfo?.decimals || 1,
+                      )}{" "}
+                      {tokenInfo?.symbol}
                     </Typography.Text>
                   </div>
                 </div>
