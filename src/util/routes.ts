@@ -1,5 +1,8 @@
 export enum RouteNames {
   WELCOME = "WELCOME",
   HOME = "HOME",
-  DASHBOARD = "DASHBOARD",
+  DEPOSIT = "DEPOSIT",
+  WITHDRAWAL = "WITHDRAWAL",
+  TRANSFER = "TRANSFER",
+  BUY = "BUY",
 }

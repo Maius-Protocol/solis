@@ -1,6 +1,9 @@
 import { Button, Card, Space, Typography } from "antd";
+import { useNavigation } from "@react-navigation/native";
+import { RouteNames } from "../../util/routes";
 
 const SolisActionsCard = () => {
+  const { navigate } = useNavigation();
   return (
     <div className="w-100">
       <Card
@@ -8,7 +11,13 @@ const SolisActionsCard = () => {
         style={{ width: "100%", borderRadius: "24px" }}
       >
         <div className="d-flex align-items-center justify-content-between px-2">
-          <Button style={{ height: 80 }} type="text">
+          <Button
+            onClick={() => {
+              navigate(RouteNames.DEPOSIT);
+            }}
+            style={{ height: 80 }}
+            type="text"
+          >
             <div>
               <lord-icon
                 trigger="loop"
@@ -18,7 +27,13 @@ const SolisActionsCard = () => {
             </div>
             <div>Deposit</div>
           </Button>
-          <Button style={{ height: 80 }} type="text">
+          <Button
+            onClick={() => {
+              navigate(RouteNames.WITHDRAWAL);
+            }}
+            style={{ height: 80 }}
+            type="text"
+          >
             <div>
               <lord-icon
                 trigger="loop"
@@ -26,9 +41,15 @@ const SolisActionsCard = () => {
                 style={{ width: "36px", height: "36px" }}
               />
             </div>
-            <div>Withdrawl</div>
+            <div>Withdrawal</div>
           </Button>
-          <Button style={{ height: 80 }} type="text">
+          <Button
+            onClick={() => {
+              navigate(RouteNames.TRANSFER);
+            }}
+            style={{ height: 80 }}
+            type="text"
+          >
             <div>
               <lord-icon
                 trigger="loop"
@@ -38,7 +59,13 @@ const SolisActionsCard = () => {
             </div>
             <div>Transfer</div>
           </Button>
-          <Button style={{ height: 80 }} type="text">
+          <Button
+            onClick={() => {
+              navigate(RouteNames.BUY);
+            }}
+            style={{ height: 80 }}
+            type="text"
+          >
             <div>
               <lord-icon
                 trigger="loop"

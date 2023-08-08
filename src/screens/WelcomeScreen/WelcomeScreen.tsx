@@ -10,14 +10,18 @@ const { Title } = Typography;
 const WelcomeScreen = () => {
   const { navigate } = useNavigation();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setTimeout(() => {
+      navigate(RouteNames.HOME);
+    }, 500);
+  }, []);
 
   return (
     <div className="h-100 d-flex align-items-center justify-content-between flex-column">
       <div>
         <Lottie animationData={investAnimation} loop={true} />
         <div className="px-2 text-center d-flex align-items-center justify-content-center flex-column">
-          <Title level={2}>👋 bro, this is Solis</Title>
+          <Title level={2}>👋 bro, welcome to Solis</Title>
           <Title level={4} style={{ marginTop: "8px" }}>
             We help you earn yield on your idle capital and return back whenever
             you need
@@ -26,6 +30,7 @@ const WelcomeScreen = () => {
       </div>
       <div className="p-3 w-100">
         <Button
+          loading
           onClick={() => {
             navigate(RouteNames.HOME);
           }}

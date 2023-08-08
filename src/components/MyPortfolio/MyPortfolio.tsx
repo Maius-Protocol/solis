@@ -5,7 +5,6 @@ import { tokenMap } from "../../constants/token";
 
 const MyPortfolio = () => {
   const { data, isRefetching } = useMeteoraVaultsInfo();
-  console.log(data);
   return (
     <div
       style={{
@@ -51,13 +50,6 @@ const MyPortfolio = () => {
                   </div>
                 </div>
               </Card>
-              {/*<List.Item.Meta*/}
-              {/*  avatar={*/}
-              {/*
-              {/*  }*/}
-              {/*  title={tokenInfo?.symbol}*/}
-              {/*  description={`Current APY: ${vault?.closest_apy?.toFixed(2)}%`}*/}
-              {/*/>*/}
             </List.Item>
           );
         }}

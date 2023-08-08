@@ -10,6 +10,7 @@ import NavigationScreen from "./screens/NavigationScreen/NavigationScreen";
 import { ConfigProvider } from "antd";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
+import { SolisTheme } from "./constants/theme";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -32,7 +33,13 @@ function App() {
 
   return (
     <RecoilRoot>
-      <ConfigProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: SolisTheme.primary_1,
+          },
+        }}
+      >
         <QueryClientProvider client={queryClient}>
           <NavigationScreen />
           <ReactQueryDevtools initialIsOpen={false} />

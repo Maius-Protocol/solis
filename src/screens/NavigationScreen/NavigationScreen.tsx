@@ -1,4 +1,3 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RouteNames } from "../../util/routes";
 import WelcomeScreen from "../WelcomeScreen/WelcomeScreen";
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,7 +8,11 @@ import {
 } from "@react-navigation/stack";
 import { Animated } from "react-native";
 import { SolisTheme } from "../../constants/theme";
-import SolisAppHeader from "../../components/SolisAppHeader/SolisAppHeader";
+import DepositScreen from "../DepositScreen/DepositScreen";
+import SolisAppHeaderLite from "../../components/SolisAppHeader/SolisAppHeaderLite";
+import WithdrawalScreen from "../WithdrawalScreen/WithdrawalScreen";
+import TransferScreen from "../TransferScreen/TransferScreen";
+import BuyScreen from "../BuyScreen/BuyScreen";
 
 const forSlide: StackCardStyleInterpolator = ({
   current,
@@ -66,8 +69,9 @@ const NavigationScreen = () => {
             cardStyle: { backgroundColor: SolisTheme.background },
             animationEnabled: true,
             cardStyleInterpolator: forSlide,
+            header: () => <SolisAppHeaderLite />,
           }}
-          initialRouteName={RouteNames.HOME}
+          initialRouteName={RouteNames.WELCOME}
         >
           <Stack.Screen
             name={RouteNames.WELCOME}
@@ -85,6 +89,13 @@ const NavigationScreen = () => {
             }}
             component={HomeScreen}
           />
+          <Stack.Screen name={RouteNames.DEPOSIT} component={DepositScreen} />
+          <Stack.Screen
+            name={RouteNames.WITHDRAWAL}
+            component={WithdrawalScreen}
+          />
+          <Stack.Screen name={RouteNames.TRANSFER} component={TransferScreen} />
+          <Stack.Screen name={RouteNames.BUY} component={BuyScreen} />
         </Stack.Navigator>
         {/*<TabNavigator />*/}
       </NavigationContainer>
