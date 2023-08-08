@@ -11,6 +11,7 @@ export async function GET(req: Request) {
     walletAddress: searchParams.get("address") || "",
     outputAmount: outputAmount,
     outputMint: searchParams.get("outputMint") || "",
+    manualSwapTokenInputList: [],
     mode: searchParams.get("mode") == CombinationSwapMode.MANUAL ? CombinationSwapMode.MANUAL : CombinationSwapMode.AUTO
   }
 
