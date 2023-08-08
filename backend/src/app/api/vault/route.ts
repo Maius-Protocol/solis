@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { getWalletBalance } from "@/app/services/getWalletBalance";
+import { getUserMeteoraVaultBalance } from "@/app/services/getUserMeteoraVaultBalance";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const data = await getWalletBalance(
+  const data = await getUserMeteoraVaultBalance(
     searchParams.get("address") || "",
-    searchParams.get("vsToken") || "",
   );
 
   return NextResponse.json({ data: data });
