@@ -9,6 +9,7 @@ import {
 } from "@react-navigation/stack";
 import { Animated } from "react-native";
 import { SolisTheme } from "../../constants/theme";
+import SolisAppHeader from "../../components/SolisAppHeader/SolisAppHeader";
 
 const forSlide: StackCardStyleInterpolator = ({
   current,
@@ -57,34 +58,37 @@ const Stack = createStackNavigator();
 
 const NavigationScreen = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          animationTypeForReplace: "push",
-          cardStyle: { backgroundColor: SolisTheme.background },
-          animationEnabled: true,
-          cardStyleInterpolator: forSlide,
-        }}
-      >
-        <Stack.Screen
-          name={RouteNames.WELCOME}
-          options={{
-            headerTitle: () => <></>,
-            headerShown: false,
+    <>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            animationTypeForReplace: "push",
+            cardStyle: { backgroundColor: SolisTheme.background },
+            animationEnabled: true,
+            cardStyleInterpolator: forSlide,
           }}
-          component={WelcomeScreen}
-        />
-        <Stack.Screen
-          name={RouteNames.HOME}
-          options={{
-            headerTitle: () => <></>,
-            headerShown: false,
-          }}
-          component={HomeScreen}
-        />
-      </Stack.Navigator>
-      {/*<TabNavigator />*/}
-    </NavigationContainer>
+          initialRouteName={RouteNames.HOME}
+        >
+          <Stack.Screen
+            name={RouteNames.WELCOME}
+            options={{
+              headerTitle: () => <></>,
+              headerShown: false,
+            }}
+            component={WelcomeScreen}
+          />
+          <Stack.Screen
+            name={RouteNames.HOME}
+            options={{
+              headerTitle: () => <></>,
+              headerShown: false,
+            }}
+            component={HomeScreen}
+          />
+        </Stack.Navigator>
+        {/*<TabNavigator />*/}
+      </NavigationContainer>
+    </>
   );
 };
 

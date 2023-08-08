@@ -8,6 +8,7 @@
     "dev": "BROWSER=none expo start --web & npx xnft --iframe http://localhost:19006"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.5",
     "@coral-xyz/anchor": "^0.27.0",
     "@coral-xyz/common-public": "^0.2.0-latest.3375",
     "@expo-google-fonts/dev": "*",
@@ -35,9 +36,11 @@
     "glob": "^8.0.3",
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
+    "lord-icon-element": "^4.1.1",
     "lottie-react": "^2.4.0",
     "next": "^13.4.12",
     "react": "18.2.0",
+    "react-countup": "^6.4.2",
     "react-dom": "18.2.0",
     "react-error-overlay": "6.0.11",
     "react-native": "0.71.3",
@@ -46,6 +49,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-web": "~0.18.12",
     "recoil": "*",
+    "styled-components": "^6.0.7",
     "twrnc": "*",
     "uuid": "*"
   },

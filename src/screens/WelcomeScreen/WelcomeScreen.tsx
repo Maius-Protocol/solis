@@ -10,11 +10,7 @@ const { Title } = Typography;
 const WelcomeScreen = () => {
   const { navigate } = useNavigation();
 
-  useEffect(() => {
-    setTimeout(() => {
-      navigate(RouteNames.HOME);
-    }, 1500);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="h-100 d-flex align-items-center justify-content-between flex-column">
