@@ -29,3 +29,11 @@ export interface BuyNFTListing {
   buyer: string;
   mint: string;
 }
+
+export interface ActiveListing {
+  mint: string;
+  seller: string;
+  price: string;
+  unit: string;
+  metadata: any;
+}
