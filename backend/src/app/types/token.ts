@@ -4,7 +4,7 @@ export interface TokenPrice {
 
 export interface TokenBalance {
     address: string;
-    balance: any;
+    balance: number;
     symbol: string;
     decimals: number;
     price: TokenPrice;

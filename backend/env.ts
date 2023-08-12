@@ -6,7 +6,7 @@ export const SHYFT_API_KEY = process.env.SHYFT_API_KEY || console.log("Missing e
 
 export const JUPITER_PRICE_API = process.env.JUPITER_PRICE_API || "https://price.jup.ag/v4";
 
-export const JUPITER_QUOTE_API = process.env.JUPITER_QUOTE_API || "https://quote-api.jup.ag/v4";
+export const JUPITER_QUOTE_API = process.env.JUPITER_QUOTE_API || "https://quote-api.jup.ag";
 
 export const SOL_ADDRESS = "So11111111111111111111111111111111111111112";
 

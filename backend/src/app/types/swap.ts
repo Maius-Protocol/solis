@@ -24,6 +24,9 @@ export interface CombinationSwapRoute {
         tokenInfo: any,
         jupiterSwapRoute: any,
         amount: number
-    },
-    order: number
+    }
+}
+
+export interface SwapTransactions {
+    swapTxs: string[]
 }

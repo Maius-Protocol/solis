@@ -12,9 +12,27 @@ export default {
       .json<any>((r) => r.data);
   },
 
-  getSwapRoutes: (inputMint: string, outputMint: string, amount: number, swapMode: string = "ExactIn", slippageBps: number) => {
-    return quoteApi.url(`/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&swapMode=${swapMode}&slippageBps=${slippageBps}`)
+  getSwapRoutesV4: (inputMint: string, outputMint: string, amount: number, swapMode: string = "ExactIn", slippageBps: number) => {
+    return quoteApi.url(`/v4/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&swapMode=${swapMode}&slippageBps=${slippageBps}`)
       .get()
       .json<any[]>((r) => r.data);
+  },
+
+  getSwapRoutesV6: (inputMint: string, outputMint: string, amount: number, swapMode: string = "ExactIn", slippageBps: number) => {
+    return quoteApi.url(`/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&swapMode=${swapMode}&slippageBps=${slippageBps}`)
+      .get()
+      .json<any>((r) => r);
+  },
+
+  buildSwapTxV4: (swapRoute: any) => {
+    return quoteApi.url(`/v4/swap`)
+      .post(swapRoute)
+      .json<any>((r) => r);
+  },
+
+  buildSwapTxV6: (swapRoute: any) => {
+    return quoteApi.url(`/v6/swap`)
+      .post(swapRoute)
+      .json<any>((r) => r);
   }
 };
