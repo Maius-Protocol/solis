@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -6,43 +6,31 @@ import {
   Divider,
   Dropdown,
   InputNumber,
-  Radio,
-  Space,
   Table,
   Typography,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import useWalletBalance, {
-  Daum,
-  IWalletResponse,
-} from "../../service/useWalletBalance";
+import useWalletBalance, { Daum } from "../../service/useWalletBalance";
 import { usePublicKeys } from "../../hooks/xnft-hooks";
-import {
-  CaretDownOutlined,
-  DownOutlined,
-  SendOutlined,
-} from "@ant-design/icons";
+import { CaretDownOutlined, SendOutlined } from "@ant-design/icons";
 import useMeteoraVaultsInfo from "../../service/useMeteoraVaultsInfo";
 import { useForm } from "react-hook-form";
-import { formatTokenAmount } from "../../util/formater";
 import { findToken } from "../../constants/token";
 
 const DepositScreen = () => {
   const { watch, setValue, register, getValues } = useForm();
   const keys = usePublicKeys();
   const { data: vaults, isLoading: isLoadingVaults } = useMeteoraVaultsInfo();
-  const { data: walletBalancesData, isLoading: isLoadingWallet } =
-    useWalletBalance(keys?.solana?.toString());
-  const walletBalances = walletBalancesData?.data?.data;
-
   const selectedVault = watch("selectedVault");
+  const { data: walletBalancesData, isLoading: isLoadingWallet } =
+    useWalletBalance(keys?.solana?.toString(), selectedVault);
+  const walletBalances = walletBalancesData?.data?.data;
   const deposit = watch("deposit");
   const amount = watch("amount");
   const vault = vaults?.find((e) => e.token_address === selectedVault);
   const token = findToken(selectedVault);
   const disabled = !vault;
 
-  console.log(amount);
   const columns: ColumnsType<Daum> = [
     {
       title: "Token",
@@ -67,17 +55,20 @@ const DepositScreen = () => {
       render: (_, record) => {
         return (
           <span>
-            {_} {record.symbol}
+            <b>{_?.toPrecision(4)}</b> {record.symbol}
           </span>
         );
       },
     },
     {
       title: "Deposit Amount",
-      dataIndex: "balance",
+      width: 300,
       render: (_, record) => {
         const key = `amount.${record.address}`;
         const percentage = watch(key);
+        const rate = record.price[selectedVault];
+        const total = record.balance * rate;
+        const _amount = (percentage / 100 || 0) * total;
         return (
           <div className="d-flex flex-row">
             <InputNumber
@@ -85,9 +76,10 @@ const DepositScreen = () => {
               onChange={(value) => {
                 setValue(key, value);
               }}
-              name={``}
-              addonAfter={`=${(percentage || 0) * 0} SOL`}
-              defaultValue={100}
+              name={`${key}`}
+              addonAfter={`~${_amount?.toPrecision(4)} ${vault?.symbol}`}
+              value={percentage}
+              max={record?.symbol === "SOL" ? 99 : 100}
             />
           </div>
         );
@@ -95,7 +87,42 @@ const DepositScreen = () => {
     },
   ];
 
-  console.log(selectedVault);
+  const onSubmit = () => {
+    const payload = {
+      target: selectedVault,
+      swaps: deposit?.map((address) => {
+        const formState = getValues();
+        const percentage = formState?.amount[address];
+
+        const record = walletBalances?.find((e) => e.address === address);
+        const rate = record.price[selectedVault];
+        const total = record.balance * rate;
+        const _amount = (percentage / 100 || 0) * total;
+        return {
+          amount: _amount,
+          address: address,
+        };
+      }),
+    };
+    console.log(payload);
+  };
+
+  useEffect(() => {
+    if (vaults && vaults?.length !== 0) {
+      setValue("selectedVault", vaults?.[0]?.token_address);
+    }
+  }, [vaults]);
+
+  useEffect(() => {
+    if (walletBalances && walletBalances?.length !== 0 && vault) {
+      walletBalances?.forEach((record) => {
+        setValue(
+          `amount.${record?.address}`,
+          record?.symbol === "SOL" ? 99 : 100,
+        );
+      });
+    }
+  }, [walletBalances, vault]);
 
   return (
     <div className="px-2">
@@ -108,16 +135,11 @@ const DepositScreen = () => {
           rowSelection={{
             type: "checkbox",
             onChange: (selectedRowKeys: React.Key[], selectedRows: Daum[]) => {
-              console.log(selectedRows);
-              setValue(
-                "deposit",
-                selectedRows?.map((row) => ({
-                  address: row.address,
-                })),
-              );
+              setValue("deposit", selectedRowKeys);
             },
           }}
           pagination={false}
+          rowKey="address"
           columns={columns}
           dataSource={walletBalances || []}
         />
@@ -182,6 +204,7 @@ const DepositScreen = () => {
           width: "96%",
         }}
         disabled={disabled}
+        onClick={onSubmit}
       >
         <div className="d-flex align-items-center justify-content-center">
           <SendOutlined style={{ marginRight: "6px" }} />
