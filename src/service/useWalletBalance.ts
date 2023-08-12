@@ -19,6 +19,24 @@ export interface Price {
   USDC: number;
 }
 
+function useWalletBalance(publicKey?: string) {
+  return useQuery(
+    ["wallet-balance", publicKey],
+    () => {
+      return mockData;
+      return axiosInstance.get<IWalletResponse>(ApiRoutes.walletBalance, {
+        params: {
+          address: publicKey,
+          vsToken: "USDC",
+        },
+      });
+    },
+    {
+      enabled: !!publicKey && publicKey !== "",
+    },
+  );
+}
+
 const mockData = {
   data: {
     data: [
@@ -37,23 +55,5 @@ const mockData = {
     ],
   },
 };
-
-function useWalletBalance(publicKey?: string) {
-  return useQuery(
-    ["wallet-balance", publicKey],
-    () => {
-      return mockData;
-      return axiosInstance.get<IWalletResponse>(ApiRoutes.walletBalance, {
-        params: {
-          address: publicKey,
-          vsToken: "USDC",
-        },
-      });
-    },
-    {
-      enabled: !!publicKey && publicKey !== "",
-    },
-  );
-}
 
 export default useWalletBalance;

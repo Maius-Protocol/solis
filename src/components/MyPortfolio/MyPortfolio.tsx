@@ -1,4 +1,3 @@
-import useMeteoraVaultsInfo from "../../service/useMeteoraVaultsInfo";
 import { SolisTheme } from "../../constants/theme";
 import { Avatar, Card, Divider, List, Tag, Typography } from "antd";
 import { tokenMap } from "../../constants/token";
