@@ -19,3 +19,7 @@ export function nFormatter(num: number, digits: number) {
     ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol
     : "0";
 }
+
+export function formatTokenAmount(amount: string, decimals: number) {
+  return (+amount / Math.pow(10, decimals)).toFixed(2);
+}

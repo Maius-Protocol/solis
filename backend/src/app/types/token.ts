@@ -1,5 +1,5 @@
 export interface TokenPrice {
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export interface TokenBalance {
@@ -9,4 +9,23 @@ export interface TokenBalance {
     decimals: number;
     price: TokenPrice;
     image: string;
+}
+
+export interface DepositVault {
+  publicKey: string;
+  mint: string;
+  amount: string;
+}
+
+export interface WithdrawVault {
+  publicKey: string;
+  mint: string;
+  amount: string;
+}
+
+export interface BuyNFTListing {
+  owner: string;
+  maxPrice: string;
+  buyer: string;
+  mint: string;
 }

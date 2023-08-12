@@ -1,17 +1,27 @@
 import { registerRootComponent } from "expo";
 import { RecoilRoot } from "recoil";
 import { ActivityIndicator, View } from "react-native";
-import { Raleway_300Light, useFonts } from "@expo-google-fonts/dev";
+import { useFonts } from "@expo-google-fonts/dev";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./app.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import NavigationScreen from "./screens/NavigationScreen/NavigationScreen";
-const queryClient = new QueryClient();
+import { ConfigProvider } from "antd";
+import lottie from "lottie-web";
+import { defineElement } from "lord-icon-element";
+import { SolisTheme } from "./constants/theme";
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
-  let [fontsLoaded] = useFonts({
-    Raleway_300Light,
-  });
+  defineElement(lottie.loadAnimation);
+  let [fontsLoaded] = useFonts({});
 
   if (!fontsLoaded) {
     return (
@@ -23,10 +33,18 @@ function App() {
 
   return (
     <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <NavigationScreen />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: SolisTheme.primary_1,
+          },
+        }}
+      >
+        <QueryClientProvider client={queryClient}>
+          <NavigationScreen />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ConfigProvider>
     </RecoilRoot>
   );
 }
