@@ -62,4 +62,79 @@ export default {
       })
       .json<any>((r) => r.data);
   },
+  getActiveListing: (slug: string) => {
+    return api
+      .url("/")
+      .headers({ "X-TENSOR-API-KEY": TENSOR_SWAP_API_KEY || "" })
+      .post({
+        query: `query ActiveListingsV2(
+                  $slug: String!
+                  $sortBy: ActiveListingsSortBy!
+                  $filters: ActiveListingsFilters
+                  $limit: Int
+                  $cursor: ActiveListingsCursorInputV2
+                ) {
+                  activeListingsV2(
+                    slug: $slug
+                    sortBy: $sortBy
+                    filters: $filters
+                    limit: $limit
+                    cursor: $cursor
+                  ) {
+                    page {
+                      endCursor {
+                        str
+                      }
+                      hasMore
+                    }
+                    txs {
+                      mint {
+                        onchainId
+                        metadataUri
+                        imageUri
+                      }
+                      tx {
+                        sellerId
+                        grossAmount
+                        grossAmountUnit
+                      }
+                    }
+                  }
+                }`,
+        variables: {
+          slug: slug,
+          sortBy: "PriceAsc",
+          filters: {
+            sources: ["TENSORSWAP"],
+          },
+          limit: 100,
+          cursor: null,
+        },
+      })
+      .json<any>((r) => r.data);
+  },
+  getInstrument: (slug: string) => {
+    return api
+      .url("/")
+      .headers({ "X-TENSOR-API-KEY": TENSOR_SWAP_API_KEY || "" })
+      .post({
+        query: `query Instrument($slug: String!) {
+                  instrumentTV2(slug: $slug) {
+                    id
+                    slug
+                    slugDisplay
+                    creator
+                    name
+                    symbol
+                    imageUri
+                    description
+                  }
+                }
+                `,
+        variables: {
+          slug: slug,
+        },
+      })
+      .json<any>((r) => r.data);
+  },
 };
