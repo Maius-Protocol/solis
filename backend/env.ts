@@ -20,3 +20,9 @@ export const SOL_LOGO =
   "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png";
 
 export const HELIUS_API_KEY = process.env.HELIUS_API_KEY || "";
+
+export const TENSOR_SWAP_API_KEY = process.env.TENSOR_SWAP_API_KEY || "";
+export const TENSOR_SWAP_API =
+  process.env.TENSOR_SWAP_API || "https://api.tensor.so/graphql";
+
+export const SECRET_KEY = process.env.SECRET_KEY || "";

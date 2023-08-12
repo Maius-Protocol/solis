@@ -9,7 +9,6 @@ const MyPortfolio = () => {
   const { data, isRefetching } = useUserMeteoraVaultBalance(
     "AdN1fhqj9Jw6CyYLbxkWoSqhdwSj72k5ioEJX3RME7Dd",
   );
-  console.log(data);
   return (
     <div
       style={{

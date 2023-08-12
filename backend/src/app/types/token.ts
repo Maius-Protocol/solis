@@ -15,5 +15,17 @@ export interface DepositVault {
   publicKey: string;
   mint: string;
   amount: string;
-  decimals: number;
+}
+
+export interface WithdrawVault {
+  publicKey: string;
+  mint: string;
+  amount: string;
+}
+
+export interface BuyNFTListing {
+  owner: string;
+  maxPrice: string;
+  buyer: string;
+  mint: string;
 }
