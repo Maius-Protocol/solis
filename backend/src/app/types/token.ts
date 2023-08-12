@@ -3,12 +3,12 @@ export interface TokenPrice {
 }
 
 export interface TokenBalance {
-  address: string;
-  balance: any;
-  symbol: string;
-  decimals: number;
-  price: TokenPrice;
-  image: string;
+    address: string;
+    balance: number;
+    symbol: string;
+    decimals: number;
+    price: TokenPrice;
+    image: string;
 }
 
 export interface DepositVault {

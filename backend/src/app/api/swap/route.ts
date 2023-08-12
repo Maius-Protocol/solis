@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCombinationSwapRoutes } from "@/app/services/getCombinationSwapRoutes";
+import { buildSwapTransactions } from "@/app/services/buildSwapTransactions";
 import { CombinationSwapMode, CombinationSwapRouteInput } from "@/app/types/swap";
 
 export async function GET(req: Request) {
@@ -17,5 +18,11 @@ export async function GET(req: Request) {
 
   const data = await getCombinationSwapRoutes(combinationSwapRouteInput);
 
+  return NextResponse.json({ data: data });
+}
+
+export async function POST(req: Request) {
+  const combinationSwapRouteInput = (await req.json() ?? {}) as CombinationSwapRouteInput;
+  const data = await buildSwapTransactions(combinationSwapRouteInput)
   return NextResponse.json({ data: data });
 }
