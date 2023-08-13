@@ -12,13 +12,13 @@ export default {
       .json<any>((r) => r.data);
   },
 
-  getSwapRoutesV4: (inputMint: string, outputMint: string, amount: number, swapMode: string = "ExactIn", slippageBps: number) => {
+  getSwapRoutesV4: (inputMint: string, outputMint: string, amount: string, swapMode: string = "ExactIn", slippageBps: number) => {
     return quoteApi.url(`/v4/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&swapMode=${swapMode}&slippageBps=${slippageBps}`)
       .get()
       .json<any[]>((r) => r.data);
   },
 
-  getSwapRoutesV6: (inputMint: string, outputMint: string, amount: number, swapMode: string = "ExactIn", slippageBps: number) => {
+  getSwapRoutesV6: (inputMint: string, outputMint: string, amount: string, swapMode: string = "ExactIn", slippageBps: number) => {
     return quoteApi.url(`/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&swapMode=${swapMode}&slippageBps=${slippageBps}`)
       .get()
       .json<any>((r) => r);

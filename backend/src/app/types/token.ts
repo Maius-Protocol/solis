@@ -3,24 +3,21 @@ export interface TokenPrice {
 }
 
 export interface TokenBalance {
-    address: string;
-    balance: number;
-    symbol: string;
-    decimals: number;
-    price: TokenPrice;
-    image: string;
+  name: string;
+  address: string;
+  balance: number;
+  symbol: string;
+  decimals: number;
+  price: TokenPrice;
+  image: string;
 }
 
-export interface DepositVault {
-  publicKey: string;
-  mint: string;
-  amount: string;
-}
-
-export interface WithdrawVault {
-  publicKey: string;
-  mint: string;
-  amount: string;
+export interface TokenInfo {
+  name: string;
+  address: string;
+  symbol: string;
+  decimals: number;
+  logoURI?: string;
 }
 
 export interface BuyNFTListing {

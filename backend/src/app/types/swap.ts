@@ -1,4 +1,4 @@
-import { TokenBalance } from "./token";
+import { TokenBalance, TokenInfo } from "./token";
 
 export enum CombinationSwapMode {
   AUTO = "auto",
@@ -10,19 +10,21 @@ export interface ManualSwapTokenInput {
   amount: number;
 }
 
-export interface aCombinationSwapRouteInput {
+export interface CombinationSwapRouteInput {
   walletAddress: string;
-  outputAmount: number;
-  outputMint: string;
+  outputToken: {
+    tokenInfo: TokenInfo,
+    amount: number,
+  }
   manualSwapTokenInputList: ManualSwapTokenInput[];
   mode: CombinationSwapMode;
 }
 
 export interface CombinationSwapRoute {
-    isSwapRoute: boolean,
-    inputToken: {
-        tokenInfo: any,
-        jupiterSwapRoute: any,
-        amount: number
-    }
+  isSwapRoute: boolean,
+  inputToken: {
+    tokenInfo: any,
+    jupiterSwapRoute: any,
+    amount: number
+  }
 }

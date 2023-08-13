@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import { getUserMeteoraVaultBalance } from "@/app/services/getUserMeteoraVaultBalance";
-import { depositToMeteoraVault } from "@/app/services/depositToMeteoraVault";
-import { withdrawMeteoraVault } from "@/app/services/withdrawMeteaoraVault";
-import { buyNftWithTensorSwap } from "@/app/services/buyNftWithTensorswap";
-import { getTensorSwapActiveListing } from "@/app/services/getTensorSwapActiveListing";
+import { SwapAndDepositVaultInput, SwapAndDepositVaultResponse } from "@/app/types/vault";
+import { swapAndDepositVault } from "@/app/services/swapAndDepositVault";
+import shyft from "@/app/adapters/shyft";
 
 export async function OPTIONS(request: Request) {
   const allowedOrigin = request.headers.get("origin");
@@ -20,23 +18,9 @@ export async function OPTIONS(request: Request) {
 
   return response;
 }
+
 export async function POST(req: Request) {
-  // const { publicKey, mint, amount } = await req.json();
-  // const data = await withdrawMeteoraVault({
-  //   publicKey: publicKey,
-  //   mint: mint,
-  //   amount: amount,
-  // });
-
-  // const { buyer, owner, mint, maxPrice } = await req.json();
-  // const data = await buyNftWithTensorSwap({
-  //   buyer: buyer,
-  //   owner: owner,
-  //   mint: mint,
-  //   maxPrice: maxPrice,
-  // });
-  const { slug } = await req.json();
-  const data = await getTensorSwapActiveListing(slug);
-
+  const swapAndDepositVaultInput = (await req.json() ?? {}) as SwapAndDepositVaultInput;
+  let data = await swapAndDepositVault(swapAndDepositVaultInput)
   return NextResponse.json({ data: data });
 }

@@ -1,4 +1,4 @@
-import { WithdrawVault } from "@/app/types/token";
+import { WithdrawVault } from "@/app/types/vault";
 import { createMeteoraVault } from "@/app/services/createMeteoraVault";
 import BN from "bn.js";
 import { PublicKey } from "@solana/web3.js";
