@@ -19,14 +19,10 @@ export interface aCombinationSwapRouteInput {
 }
 
 export interface CombinationSwapRoute {
-  isSwapRoute: boolean;
-  inputToken: {
-    tokenInfo: any;
-    jupiterSwapRoute: any;
-    amount: number;
-  };
-}
-
-export interface SwapTransactions {
-  swapTxs: string[];
+    isSwapRoute: boolean,
+    inputToken: {
+        tokenInfo: any,
+        jupiterSwapRoute: any,
+        amount: number
+    }
 }
