@@ -6,6 +6,9 @@ const axiosInstance = axios.create({
 
 export const ApiRoutes = {
   walletBalance: "/token",
+  userMeteoraVaultBalance: (userWalletAddress: string) =>
+    `/vault?address=${userWalletAddress}`,
+  swapAndDeposit: "vault/deposit",
 };
 
 export default axiosInstance;

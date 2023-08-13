@@ -10,6 +10,8 @@ import NavigationScreen from "./screens/NavigationScreen/NavigationScreen";
 import { ConfigProvider } from "antd";
 import lottie from "lottie-web";
 import { defineElement } from "lord-icon-element";
+import { Buffer } from "buffer";
+
 import { SolisTheme } from "./constants/theme";
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +21,8 @@ const queryClient = new QueryClient({
   },
 });
 
+// @ts-ignore
+window.Buffer = Buffer;
 function App() {
   defineElement(lottie.loadAnimation);
   let [fontsLoaded] = useFonts({});

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Button,
@@ -11,25 +11,44 @@ import {
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import useWalletBalance, { Daum } from "../../service/useWalletBalance";
-import { usePublicKeys } from "../../hooks/xnft-hooks";
+import { usePublicKeys, useSolanaProvider } from "../../hooks/xnft-hooks";
 import { CaretDownOutlined, SendOutlined } from "@ant-design/icons";
 import useMeteoraVaultsInfo from "../../service/useMeteoraVaultsInfo";
 import { useForm } from "react-hook-form";
 import { findToken } from "../../constants/token";
-
+import useSwapAndDeposit from "../../service/useSwapAndDeposit";
+import {
+  AddressLookupTableAccount,
+  Message,
+  PublicKey,
+  sendAndConfirmRawTransaction,
+  Transaction,
+  TransactionMessage,
+  VersionedTransaction,
+} from "@solana/web3.js";
+import { Buffer } from "buffer";
+import VerifiedSignatureProgress from "../../components/VerifiedSignatureProgress";
 const DepositScreen = () => {
+  const [signedTxs, setSignedTxs] = useState();
+  const provider = useSolanaProvider();
+  const sendAndConfirm = provider?.sendAndConfirm;
   const { watch, setValue, register, getValues } = useForm();
   const keys = usePublicKeys();
+  const userWalletAddress = keys?.solana?.toString();
   const { data: vaults, isLoading: isLoadingVaults } = useMeteoraVaultsInfo();
   const selectedVault = watch("selectedVault");
   const { data: walletBalancesData, isLoading: isLoadingWallet } =
-    useWalletBalance(keys?.solana?.toString(), selectedVault);
+    useWalletBalance(userWalletAddress, selectedVault);
+  const { mutateAsync, isLoading: isMutating } = useSwapAndDeposit(
+    userWalletAddress!,
+    selectedVault,
+  );
+
   const walletBalances = walletBalancesData?.data?.data;
   const deposit = watch("deposit");
-  const amount = watch("amount");
   const vault = vaults?.find((e) => e.token_address === selectedVault);
   const token = findToken(selectedVault);
-  const disabled = !vault;
+  const disabled = !vault || !deposit || deposit?.length === 0;
 
   const columns: ColumnsType<Daum> = [
     {
@@ -87,9 +106,8 @@ const DepositScreen = () => {
     },
   ];
 
-  const onSubmit = () => {
-    const payload = {
-      target: selectedVault,
+  const onSubmit = async () => {
+    const _response = await mutateAsync({
       swaps: deposit?.map((address) => {
         const formState = getValues();
         const percentage = formState?.amount[address];
@@ -101,10 +119,74 @@ const DepositScreen = () => {
         return {
           amount: _amount,
           address: address,
+          tokenInfo: record,
         };
       }),
-    };
-    console.log(payload);
+    });
+    const txs = _response?.data?.data || [];
+    console.log(_response?.data);
+    const connection = window.xnft.solana.connection;
+
+    // const _signedTransactions = await window.xnft.solana.signAllTransactions(
+    //   txs?.map((tx) => {
+    //     const transactionDecoded = new Buffer(tx!, "base64");
+    //     const transaction =
+    //       VersionedTransaction.deserialize(transactionDecoded);
+    //     return transaction;
+    //     // transaction.sign([new PublicKey(userWalletAddress)]);
+    //   }),
+    // );
+
+    const swap = VersionedTransaction.deserialize(new Buffer(txs[0], "base64"));
+    const _deposit = Transaction.from(new Buffer(txs[1], "base64"));
+    const addressLookupTableAccounts = await Promise.all(
+      swap.message.addressTableLookups.map(async (lookup) => {
+        return new AddressLookupTableAccount({
+          key: lookup.accountKey,
+          state: AddressLookupTableAccount.deserialize(
+            await connection.getAccountInfo(lookup.accountKey).then((res) => {
+              return res.data;
+            }),
+          ),
+        });
+      }),
+    );
+    var message = TransactionMessage.decompile(swap.message, {
+      addressLookupTableAccounts: addressLookupTableAccounts,
+    });
+    message.instructions.push(..._deposit.instructions);
+    swap.message = message.compileToV0Message(addressLookupTableAccounts);
+
+    const combinedSigned = await window.xnft.solana.signTransaction(swap);
+    // const sig = await window.xnft.solana.send(swap);
+
+    const rawTransaction = combinedSigned.serialize();
+    const txid = await connection.sendRawTransaction(
+      Buffer.from(rawTransaction),
+      {
+        skipPreflight: true,
+        commitment: "confirmed",
+        maxRetries: 2,
+      },
+    );
+
+    console.log(txid);
+    // async function sendTransactionsSequentially() {
+    //   for (const tx of _signedTransactions) {
+    //     console.log("start working: ", tx);
+    //     const sig = await window.xnft.solana.sendAndConfirm(tx);
+    //     // await new Promise((resolve) => setTimeout(resolve, 10000));
+    //     console.log("signature: ", sig);
+    //   }
+    // }
+    // await sendTransactionsSequentially();
+
+    // await Promise.all(
+    //   [_signedTransactions[1]].map(async (tx) => {
+    //     const signature = await window.xnft.solana.sendAndConfirm(tx);
+    //     console.log("signature", signature);
+    //   }),
+    // );
   };
 
   useEffect(() => {
@@ -205,6 +287,7 @@ const DepositScreen = () => {
         }}
         disabled={disabled}
         onClick={onSubmit}
+        loading={isMutating}
       >
         <div className="d-flex align-items-center justify-content-center">
           <SendOutlined style={{ marginRight: "6px" }} />

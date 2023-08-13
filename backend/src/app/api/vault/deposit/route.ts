@@ -5,6 +5,8 @@ import {
 } from "@/app/types/vault";
 import { swapAndDepositVault } from "@/app/services/swapAndDepositVault";
 import shyft from "@/app/adapters/shyft";
+import { Buffer } from "buffer";
+import { VersionedTransaction } from "@solana/web3.js";
 
 export async function OPTIONS(request: Request) {
   const allowedOrigin = request.headers.get("origin");
@@ -27,13 +29,6 @@ export async function POST(req: Request) {
     {}) as SwapAndDepositVaultInput;
   let data = await swapAndDepositVault(swapAndDepositVaultInput);
   return NextResponse.json({
-    data: data?.txs?.map((tx) => {
-      const serializedTransaction = tx.serialize({
-        verifySignatures: false,
-        requireAllSignatures: false,
-      });
-      const base64Transaction = serializedTransaction.toString("base64");
-      return base64Transaction;
-    }),
+    data: data,
   });
 }
