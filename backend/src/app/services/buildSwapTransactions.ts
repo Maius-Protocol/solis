@@ -1,22 +1,22 @@
-import { CombinationSwapRouteInput, CombinationSwapRoute, SwapTransactions } from "../types/swap";
+import { CombinationSwapRouteInput, CombinationSwapRoute } from "../types/swap";
 import { getCombinationSwapRoutes } from "./getCombinationSwapRoutes";
 import jupiter from "../adapters/jupiter";
+import { VersionedTransaction } from "@solana/web3.js";
 
-export async function buildSwapTransactions(combinationSwapRouteInput: CombinationSwapRouteInput): Promise<SwapTransactions> {
+export async function buildSwapTransactions(combinationSwapRouteInput: CombinationSwapRouteInput): Promise<VersionedTransaction[]> {
     let combinationSwapRoutes: CombinationSwapRoute[] | string = await getCombinationSwapRoutes(combinationSwapRouteInput)
-    let swapTxs: string[] = []
-    let swapTxResp: SwapTransactions = {
-        swapTxs: swapTxs
-    }
+    let swapTxResp: VersionedTransaction[] = []
     if (combinationSwapRoutes) {
         for (const swapRoute of combinationSwapRoutes) {
             if (swapRoute?.isSwapRoute) {
-                let jupiterBuildSwapTxV6 = await jupiter.buildSwapTxV6({
+                let jupiterSwapTx = await jupiter.buildSwapTxV6({
                     "userPublicKey": combinationSwapRouteInput?.walletAddress,
                     "quoteResponse": swapRoute?.inputToken?.jupiterSwapRoute
                 })
-                if (jupiterBuildSwapTxV6) {
-                    swapTxs.push(jupiterBuildSwapTxV6["swapTransaction"])
+                if (jupiterSwapTx) {
+                    const jupiterSwapTxBuf = Buffer.from(jupiterSwapTx["swapTransaction"], "base64")
+                    let swapTx = VersionedTransaction.deserialize(jupiterSwapTxBuf)
+                    swapTxResp.push(swapTx)
                 }
             }
         }

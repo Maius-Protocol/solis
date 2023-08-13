@@ -26,7 +26,3 @@ export interface CombinationSwapRoute {
         amount: number
     }
 }
-
-export interface SwapTransactions {
-    swapTxs: string[]
-}
