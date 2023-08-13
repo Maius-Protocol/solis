@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { SwapAndDepositVaultInput, SwapAndDepositVaultResponse } from "@/app/types/vault";
+import {
+  SwapAndDepositVaultInput,
+  SwapAndDepositVaultResponse,
+} from "@/app/types/vault";
 import { swapAndDepositVault } from "@/app/services/swapAndDepositVault";
 import shyft from "@/app/adapters/shyft";
 
@@ -20,7 +23,17 @@ export async function OPTIONS(request: Request) {
 }
 
 export async function POST(req: Request) {
-  const swapAndDepositVaultInput = (await req.json() ?? {}) as SwapAndDepositVaultInput;
-  let data = await swapAndDepositVault(swapAndDepositVaultInput)
-  return NextResponse.json({ data: data });
+  const swapAndDepositVaultInput = ((await req.json()) ??
+    {}) as SwapAndDepositVaultInput;
+  let data = await swapAndDepositVault(swapAndDepositVaultInput);
+  return NextResponse.json({
+    data: data?.txs?.map((tx) => {
+      const serializedTransaction = tx.serialize({
+        verifySignatures: false,
+        requireAllSignatures: false,
+      });
+      const base64Transaction = serializedTransaction.toString("base64");
+      return base64Transaction;
+    }),
+  });
 }
