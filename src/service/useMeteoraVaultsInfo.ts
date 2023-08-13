@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { METEORA_VAULT_INFO } from "../constants/url";
 import axios from "axios";
 import { orderBy } from "lodash";
-import { enableMock } from "../constants/globalConfig";
 
 type Root = Root2[];
 
@@ -46,11 +45,7 @@ interface Strategy {
 function useMeteoraVaultsInfo() {
   return useQuery(["meteora", "vaults"], async () => {
     let data = [];
-    if (enableMock) {
-      data = mockData;
-    } else {
-      data = (await axios.get<Root>(METEORA_VAULT_INFO))?.data;
-    }
+    data = (await axios.get<Root>(METEORA_VAULT_INFO))?.data;
     return orderBy(data, ["closest_apy"], ["desc"]);
   });
 }

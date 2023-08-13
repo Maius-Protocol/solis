@@ -71,7 +71,7 @@ const NavigationScreen = () => {
             cardStyleInterpolator: forSlide,
             header: () => <SolisAppHeaderLite />,
           }}
-          initialRouteName={RouteNames.DEPOSIT}
+          initialRouteName={RouteNames.HOME}
         >
           <Stack.Screen
             name={RouteNames.WELCOME}
