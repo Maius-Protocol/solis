@@ -1,14 +1,27 @@
 import { VersionedTransaction } from "@solana/web3.js"
 import { ManualSwapTokenInput, CombinationSwapMode } from "./swap"
-import { DepositVault } from "./token"
+import { TokenInfo } from "./token"
+
+export interface DepositVault {
+    userPubkey: string;
+    depositToken: {
+        tokenInfo: TokenInfo,
+        amount: number
+    }
+}
+
+export interface WithdrawVault {
+    publicKey: string;
+    mint: string;
+    amount: string;
+}
 
 export interface SwapAndDepositVaultInput {
     walletAddress: string,
-    outputAmount: number,
-    outputMint: string,
     manualSwapTokenInputList: ManualSwapTokenInput[]
     mode: CombinationSwapMode
-    depositVaultInfo: DepositVault
+    depositMint: string;
+    amount: number;
 }
 
 export interface SwapAndDepositVaultResponse {

@@ -5,7 +5,7 @@ import { TokenPrice, TokenBalance } from "@/app/types/token";
 
 export async function getWalletBalance(walletAddress: string, vsToken: string = "USDC") {
   const walletBalance = [];
-  const solBalance = await shyft.getSolBalance(walletAddress);
+  const solBalance: TokenBalance = await shyft.getSolBalance(walletAddress);
 
   const solDataVsUSD = await jupiter.getTokenPrice(SOL_ADDRESS);
   const solPriceVsUSD = Object.keys(solDataVsUSD).map((key) => solDataVsUSD[key]);
@@ -21,6 +21,7 @@ export async function getWalletBalance(walletAddress: string, vsToken: string = 
   }
 
   walletBalance.push({
+    name: "Solana",
     address: SOL_ADDRESS,
     balance: solBalance.balance || 0,
     symbol: "SOL",
@@ -54,6 +55,7 @@ export async function getWalletBalance(walletAddress: string, vsToken: string = 
           tokenPrice[vsToken] = priceVsToken[0]?.price
         }
         walletBalance.push({
+          name: t.name,
           address: t.address,
           balance: t.balance || 0,
           symbol: t.info?.symbol,

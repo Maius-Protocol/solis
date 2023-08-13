@@ -2,19 +2,21 @@ import jupiter from "@/app/adapters/jupiter";
 import shyft from "../adapters/shyft";
 import { getWalletBalance, compareTokenBalance } from "./getWalletBalance";
 import { CombinationSwapMode, CombinationSwapRouteInput, CombinationSwapRoute, ManualSwapTokenInput } from "@/app/types/swap";
+import { multiplyBigNumbers, divideBigNumbers } from "@/app/utils/utils"
+import { TokenInfo } from "../types/token";
 
 export async function getCombinationSwapRoutes(combinationSwapRouteInput: CombinationSwapRouteInput): Promise<CombinationSwapRoute[]> {
     if (combinationSwapRouteInput?.mode == CombinationSwapMode.AUTO) {
         return autoGetCombinationSwapRoutes(
             combinationSwapRouteInput.walletAddress,
-            combinationSwapRouteInput.outputAmount,
-            combinationSwapRouteInput.outputMint,
+            combinationSwapRouteInput.outputToken?.amount,
+            combinationSwapRouteInput.outputToken?.tokenInfo,
         )
     } else if (combinationSwapRouteInput?.mode == CombinationSwapMode.MANUAL) {
         return manualGetCombinationSwapRoutes(
             combinationSwapRouteInput.walletAddress,
-            combinationSwapRouteInput.outputAmount,
-            combinationSwapRouteInput.outputMint,
+            combinationSwapRouteInput.outputToken?.amount,
+            combinationSwapRouteInput.outputToken?.tokenInfo,
             combinationSwapRouteInput.manualSwapTokenInputList
         )
     }
@@ -24,9 +26,9 @@ export async function getCombinationSwapRoutes(combinationSwapRouteInput: Combin
     }
 }
 
-export async function autoGetCombinationSwapRoutes(walletAddress: string, outputAmount: number, outputMint: string): Promise<CombinationSwapRoute[]> {
+export async function autoGetCombinationSwapRoutes(walletAddress: string, outputAmount: number, outputToken: TokenInfo): Promise<CombinationSwapRoute[]> {
+    const outputMint = outputToken?.address
     let walletBalance = await getWalletBalance(walletAddress, outputMint)
-    let outputMintInfo = await shyft.getTokenInfo(outputMint)
 
     walletBalance.sort((a, b) => compareTokenBalance(a, b, outputMint, outputMint));
 
@@ -55,7 +57,7 @@ export async function autoGetCombinationSwapRoutes(walletAddress: string, output
             jupiterSwapRoutes = await jupiter.getSwapRoutesV4(
                 tokenBalance.address,
                 outputMint,
-                Math.ceil((outputAmount * (10 ** outputMintInfo?.decimals || 0))),
+                multiplyBigNumbers(outputAmount, 10 ** outputToken?.decimals || 0).toString(),
                 "ExactOut",
                 50
             )
@@ -63,7 +65,7 @@ export async function autoGetCombinationSwapRoutes(walletAddress: string, output
             jupiterSwapRoutes = await jupiter.getSwapRoutesV4(
                 tokenBalance.address,
                 outputMint,
-                tokenBalance.balance * (10 ** tokenBalance.decimals),
+                multiplyBigNumbers(tokenBalance.balance, 10 ** tokenBalance.decimals).toString(),
                 "ExactIn",
                 50
             )
@@ -75,7 +77,7 @@ export async function autoGetCombinationSwapRoutes(walletAddress: string, output
                 inputToken: {
                     tokenInfo: tokenBalance,
                     jupiterSwapRoute: jupiterSwapRoutes[0],
-                    amount: jupiterSwapRoutes[0]?.inAmount / (10 ** tokenBalance.decimals)
+                    amount: divideBigNumbers(jupiterSwapRoutes[0]?.inAmount, (10 ** tokenBalance.decimals)).toNumber()
                 },
             }
             combinationSwapRoutes.push(swapRoute)
@@ -91,7 +93,8 @@ export async function autoGetCombinationSwapRoutes(walletAddress: string, output
     return combinationSwapRoutes
 }
 
-export async function manualGetCombinationSwapRoutes(walletAddress: string, outputAmount: number, outputMint: string, manualSwapTokenInputList: ManualSwapTokenInput[]): Promise<CombinationSwapRoute[]> {
+export async function manualGetCombinationSwapRoutes(walletAddress: string, outputAmount: number, outputToken: TokenInfo, manualSwapTokenInputList: ManualSwapTokenInput[]): Promise<CombinationSwapRoute[]> {
+    const outputMint = outputToken?.address
     let combinationSwapRoutes: CombinationSwapRoute[] = []
     for (const manualSwapTokenInput of manualSwapTokenInputList) {
         let inputToken = manualSwapTokenInput.inputToken
@@ -113,7 +116,7 @@ export async function manualGetCombinationSwapRoutes(walletAddress: string, outp
         let jupiterSwapRoute = await jupiter.getSwapRoutesV6(
             inputToken.address,
             outputMint,
-            swapAmount * (10 ** inputToken.decimals),
+            multiplyBigNumbers(swapAmount, 10 ** inputToken.decimals).toString(),
             "ExactIn",
             50
         )
@@ -123,7 +126,7 @@ export async function manualGetCombinationSwapRoutes(walletAddress: string, outp
             inputToken: {
                 tokenInfo: inputToken,
                 jupiterSwapRoute: jupiterSwapRoute,
-                amount: jupiterSwapRoute?.inAmount / (10 ** inputToken.decimals)
+                amount: divideBigNumbers(jupiterSwapRoute?.inAmount, 10 ** inputToken.decimals).toNumber()
             },
         }
         combinationSwapRoutes.push(swapRoute)
