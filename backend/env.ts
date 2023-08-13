@@ -9,7 +9,8 @@ export const SHYFT_API_KEY =
 export const JUPITER_PRICE_API =
   process.env.JUPITER_PRICE_API || "https://price.jup.ag/v4";
 
-export const JUPITER_QUOTE_API = process.env.JUPITER_QUOTE_API || "https://quote-api.jup.ag";
+export const JUPITER_QUOTE_API =
+  process.env.JUPITER_QUOTE_API || "https://quote-api.jup.ag";
 
 export const SOL_ADDRESS = "So11111111111111111111111111111111111111112";
 
@@ -25,3 +26,7 @@ export const TENSOR_SWAP_API =
   process.env.TENSOR_SWAP_API || "https://api.tensor.so/graphql";
 
 export const SECRET_KEY = process.env.SECRET_KEY || "";
+
+export const COVALENTHQ_API =
+  process.env.COVALENTHQ_API || "https://api.covalenthq.com/v1/solana-mainnet";
+export const COVALENT_API_KEYS = process.env.COVALENT_API_KEYS || "";
