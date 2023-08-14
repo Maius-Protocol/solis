@@ -4,10 +4,7 @@ import { ActiveListing } from "@/app/types/token";
 import nft from "@/app/adapters/nft";
 
 export async function getTensorSwapActiveListing(slug: string) {
-  const instrument = await tensorSwap.getInstrument(slug);
-  if (!instrument) return null;
-  const slugId = instrument.instrumentTV2.slug;
-  const data = await tensorSwap.getActiveListing(slugId);
+  const data = await tensorSwap.getActiveListing(slug);
   if (!data) return null;
   const txs = data.activeListingsV2.txs;
   const activeListings: ActiveListing[] = [];

@@ -5,4 +5,5 @@ export enum RouteNames {
   WITHDRAWAL = "WITHDRAWAL",
   TRANSFER = "TRANSFER",
   BUY = "BUY",
+  DETAIL_COLLECTION = "DETAIL_COLLECTION",
 }

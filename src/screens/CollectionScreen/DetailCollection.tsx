@@ -1,14 +1,15 @@
+import userListTensorCollections from "../../service/useListTensorCollections";
 import { SolisTheme } from "../../constants/theme";
-import { Avatar, Card, Divider, List, Spin, Tag, Typography } from "antd";
-import { tokenMap } from "../../constants/token";
-import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance";
+import { Avatar, Card, Divider, List, Typography } from "antd";
+import useActiveListing from "../../service/useActiveListings";
+import { useParams } from "next/navigation";
 import { formatTokenAmount } from "../../util/formater";
-import { usePublicKeys } from "../../hooks/xnft-hooks";
+import useListTensorCollections from "../../service/useListTensorCollections";
+import { useNavigation, useRoute } from "@react-navigation/native";
+const DetailCollectionScreen = () => {
+  const route = useRoute();
+  const { data, isLoading } = useActiveListing(route?.params?.slug as string);
 
-const MyPortfolio = () => {
-  const keys = usePublicKeys();
-  const userWalletAddress = keys?.solana?.toString();
-  const { data, isRefetching } = useUserMeteoraVaultBalance(userWalletAddress!);
   return (
     <div
       style={{
@@ -19,20 +20,15 @@ const MyPortfolio = () => {
       className="p-3"
     >
       <Typography.Title level={4} style={{ marginBottom: "8px" }}>
-        My Portfolio
+        Active Listing
       </Typography.Title>
       <Divider style={{ margin: "12px 0" }} />
-      {isRefetching && <Spin />}
       <List
-        loading={isRefetching}
+        loading={isLoading}
         itemLayout="horizontal"
         split={false}
         dataSource={data}
-        renderItem={(balance, index) => {
-          const tokenInfo = tokenMap.find(
-            (token) => token.address === balance.token,
-          );
-          console.log(balance);
+        renderItem={(nft, index) => {
           return (
             <List.Item style={{ padding: "4px 0" }}>
               <Card style={{ width: "100%", margin: 0 }}>
@@ -41,22 +37,17 @@ const MyPortfolio = () => {
                     <Avatar
                       size={48}
                       src={
-                        tokenInfo?.logoURI ??
+                        nft?.metadata?.imageUri ??
                         `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`
                       }
                     />
                   </div>
                   <div>
                     <Typography.Title level={5} style={{ margin: 0 }}>
-                      {tokenInfo?.symbol}
+                      {nft?.metadata?.name}
                     </Typography.Title>
                     <Typography.Text>
-                      Deposited:{" "}
-                      {formatTokenAmount(
-                        balance.realTokenAmount,
-                        tokenInfo?.decimals || 1,
-                      )}{" "}
-                      {tokenInfo?.symbol}
+                      Price: {formatTokenAmount(nft?.price, 9)} {"SOL"}
                     </Typography.Text>
                   </div>
                 </div>
@@ -69,4 +60,4 @@ const MyPortfolio = () => {
   );
 };
 
-export default MyPortfolio;
+export default DetailCollectionScreen;

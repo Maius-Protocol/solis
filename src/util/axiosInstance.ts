@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "http://localhost:3001/api",
 });
 
 export const ApiRoutes = {
@@ -10,6 +10,8 @@ export const ApiRoutes = {
     `/vault?address=${userWalletAddress}`,
   swapAndDeposit: "vault/deposit",
   sendAndConfirm: "transaction/send-and-confirm",
+  listCollection: "/tensor/collections",
+  activeListing: (slug: string) => `/tensor/listing?slug=${slug}`,
 };
 
 export default axiosInstance;
