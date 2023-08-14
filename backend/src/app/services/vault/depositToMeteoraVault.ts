@@ -1,7 +1,7 @@
 import { DepositVault } from "@/app/types/vault";
-import { createMeteoraVault } from "@/app/services/createMeteoraVault";
+import { createMeteoraVault } from "@/app/services/vault/createMeteoraVault";
 import { PublicKey, VersionedTransaction } from "@solana/web3.js";
-import { multiplyBigNumbers } from "../utils/utils";
+import { multiplyBigNumbers } from "../../utils/utils";
 import { BN } from "@project-serum/anchor";
 
 export async function depositToMeteoraVault(

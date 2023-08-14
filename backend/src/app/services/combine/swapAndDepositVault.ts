@@ -3,12 +3,12 @@ import {
   DepositVault,
   SwapAndDepositVaultInput,
   SwapAndDepositVaultResponse,
-} from "../types/vault";
-import { CombinationSwapRouteInput } from "../types/swap";
-import { buildSwapTransactions } from "./buildSwapTransactions";
-import { depositToMeteoraVault } from "./depositToMeteoraVault";
+} from "../../types/vault";
+import { CombinationSwapRouteInput } from "../../types/swap";
+import { buildSwapTransactions } from "../swap/buildSwapTransactions";
+import { depositToMeteoraVault } from "../vault/depositToMeteoraVault";
 import { TokenInfo } from "@solana/spl-token-registry";
-import { tokenMap } from "../constant/web3";
+import { tokenMap } from "../../constant/web3";
 
 export async function swapAndDepositVault(
   input: SwapAndDepositVaultInput,

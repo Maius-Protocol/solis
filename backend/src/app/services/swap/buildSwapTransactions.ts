@@ -1,6 +1,6 @@
-import { CombinationSwapRouteInput, CombinationSwapRoute } from "../types/swap";
+import { CombinationSwapRouteInput, CombinationSwapRoute } from "../../types/swap";
 import { getCombinationSwapRoutes } from "./getCombinationSwapRoutes";
-import jupiter from "../adapters/jupiter";
+import jupiter from "../../adapters/jupiter";
 import { Transaction, VersionedTransaction } from "@solana/web3.js";
 import { Buffer } from "buffer";
 

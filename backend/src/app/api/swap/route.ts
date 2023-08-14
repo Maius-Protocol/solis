@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getCombinationSwapRoutes } from "@/app/services/getCombinationSwapRoutes";
-import { buildSwapTransactions } from "@/app/services/buildSwapTransactions";
+import { getCombinationSwapRoutes } from "@/app/services/swap/getCombinationSwapRoutes";
+import { buildSwapTransactions } from "@/app/services/swap/buildSwapTransactions";
 import { CombinationSwapMode, CombinationSwapRouteInput } from "@/app/types/swap";
 
 export async function GET(req: Request) {

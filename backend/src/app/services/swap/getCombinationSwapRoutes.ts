@@ -1,6 +1,6 @@
 import jupiter from "@/app/adapters/jupiter";
-import shyft from "../adapters/shyft";
-import { getWalletBalance, compareTokenBalance } from "./getWalletBalance";
+import shyft from "../../adapters/shyft";
+import { getWalletBalance, compareTokenBalance } from "../wallet/getWalletBalance";
 import {
   CombinationSwapMode,
   CombinationSwapRouteInput,
@@ -8,7 +8,7 @@ import {
   ManualSwapTokenInput,
 } from "@/app/types/swap";
 import { multiplyBigNumbers, divideBigNumbers } from "@/app/utils/utils";
-import { TokenInfo } from "../types/token";
+import { TokenInfo } from "../../types/token";
 
 export async function getCombinationSwapRoutes(
   combinationSwapRouteInput: CombinationSwapRouteInput,
