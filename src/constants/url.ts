@@ -3,4 +3,4 @@ export const METEORA_VAULT_INFO =
 export const SOLIS_BACKEND_URL =
   process.env === "production"
     ? "https://solis.maius.fun"
-    : "http://localhost:3001";
+    : "http://localhost:3000";

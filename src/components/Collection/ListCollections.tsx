@@ -47,7 +47,7 @@ const ListCollection = ({ onPress }: Props) => {
                         {collection?.name}
                       </Typography.Title>
                       <Typography.Text>
-                        Minted: {collection?.statsV2?.numMints ?? 0}
+                        Minted: {collection?.statsV2?.numListed ?? 0}
                       </Typography.Text>
                     </div>
                   </div>

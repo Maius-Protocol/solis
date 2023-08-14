@@ -6,9 +6,18 @@ import { useParams } from "next/navigation";
 import { formatTokenAmount } from "../../util/formater";
 import useListTensorCollections from "../../service/useListTensorCollections";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import useWithdrawAndBuyNft from "../../service/useWithdrawAndBuyNft";
+import { usePublicKeys } from "../../hooks/xnft-hooks";
+import { Transaction, VersionedTransaction } from "@solana/web3.js";
 const DetailCollectionScreen = () => {
+  const keys = usePublicKeys();
+  const userWalletAddress = keys?.solana?.toString();
+  const { mutateAsync: createInstructions } =
+    useWithdrawAndBuyNft(userWalletAddress);
   const route = useRoute();
-  const { data, isLoading } = useActiveListing(route?.params?.slug as string);
+  // const slug = route?.params?.slug
+  const slug = "urs01";
+  const { data, isLoading } = useActiveListing(slug as string);
 
   return (
     <div
@@ -29,15 +38,29 @@ const DetailCollectionScreen = () => {
         split={false}
         dataSource={data}
         renderItem={(nft, index) => {
+          console.log(nft);
           return (
             <List.Item style={{ padding: "4px 0" }}>
-              <Card style={{ width: "100%", margin: 0 }}>
+              <Card
+                onClick={async () => {
+                  const instructions = await createInstructions({
+                    nftPrice: parseInt(nft.price) / 1_000_000_000,
+                    nftOwner: nft.seller,
+                    nftMint: nft.mint,
+                  });
+                  const tx = VersionedTransaction.deserialize(
+                    new Buffer.from(instructions?.data?.data, "base64"),
+                  );
+                  window.xnft.solana.sendAndConfirm(tx);
+                }}
+                style={{ width: "100%", margin: 0 }}
+              >
                 <div className="d-flex flex-row ">
                   <div style={{ marginRight: "12px" }}>
                     <Avatar
                       size={48}
                       src={
-                        nft?.metadata?.imageUri ??
+                        nft?.metadata?.image ??
                         `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`
                       }
                     />

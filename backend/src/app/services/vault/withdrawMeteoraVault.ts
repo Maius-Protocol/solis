@@ -4,7 +4,9 @@ import BN from "bn.js";
 import { PublicKey, Transaction } from "@solana/web3.js";
 import { multiplyBigNumbers } from "@/app/utils/utils";
 
-export async function withdrawMeteoraVault(withdrawVault: WithdrawVault): Promise<Transaction> {
+export async function withdrawMeteoraVault(
+  withdrawVault: WithdrawVault,
+): Promise<Transaction> {
   const vaultImpl = await createMeteoraVault(
     withdrawVault?.withdrawToken?.tokenInfo?.address,
   );

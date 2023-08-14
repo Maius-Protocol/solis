@@ -105,13 +105,16 @@ export default {
           slug: slug,
           sortBy: "PriceAsc",
           filters: {
-            sources: ["TENSORSWAP"],
+            sources: ["TENSORSWAP", "TCOMP"],
           },
           limit: 100,
           cursor: null,
         },
       })
-      .json<any>((r: any) => r.data);
+      .json<any>((r: any) => {
+        console.log(r);
+        return r.data;
+      });
   },
   getInstrument: (slug: string) => {
     return api
@@ -194,6 +197,9 @@ export default {
           page: 1, // For pagination (since max 50 per query)
         },
       })
-      .json<any>((r: any) => r.data);
+      .json<any>((r: any) => {
+        console.log(r);
+        return r.data;
+      });
   },
 };

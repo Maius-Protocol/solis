@@ -1,7 +1,8 @@
 import axios from "axios";
+import { SOLIS_BACKEND_URL } from "../constants/url";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: SOLIS_BACKEND_URL + "/api",
 });
 
 export const ApiRoutes = {
@@ -12,6 +13,7 @@ export const ApiRoutes = {
   sendAndConfirm: "transaction/send-and-confirm",
   listCollection: "/tensor/collections",
   activeListing: (slug: string) => `/tensor/listing?slug=${slug}`,
+  withdrawAndBuy: "vault/buy",
 };
 
 export default axiosInstance;
