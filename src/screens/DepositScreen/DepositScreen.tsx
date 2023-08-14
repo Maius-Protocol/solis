@@ -124,7 +124,6 @@ const DepositScreen = () => {
       }),
     });
     const txs = _response?.data?.data || [];
-    console.log(_response?.data);
     const connection = window.xnft.solana.connection;
 
     // const _signedTransactions = await window.xnft.solana.signAllTransactions(
@@ -138,24 +137,6 @@ const DepositScreen = () => {
     // );
 
     const swap = VersionedTransaction.deserialize(new Buffer(txs[0], "base64"));
-    const _deposit = Transaction.from(new Buffer(txs[1], "base64"));
-    const addressLookupTableAccounts = await Promise.all(
-      swap.message.addressTableLookups.map(async (lookup) => {
-        return new AddressLookupTableAccount({
-          key: lookup.accountKey,
-          state: AddressLookupTableAccount.deserialize(
-            await connection.getAccountInfo(lookup.accountKey).then((res) => {
-              return res.data;
-            }),
-          ),
-        });
-      }),
-    );
-    var message = TransactionMessage.decompile(swap.message, {
-      addressLookupTableAccounts: addressLookupTableAccounts,
-    });
-    message.instructions.push(..._deposit.instructions);
-    swap.message = message.compileToV0Message(addressLookupTableAccounts);
 
     const combinedSigned = await window.xnft.solana.signTransaction(swap);
     // const sig = await window.xnft.solana.send(swap);

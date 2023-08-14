@@ -1,12 +1,12 @@
 import { DepositVault } from "@/app/types/vault";
 import { createMeteoraVault } from "@/app/services/createMeteoraVault";
-import { PublicKey, VersionedTransaction } from "@solana/web3.js";
+import { PublicKey, Transaction, VersionedTransaction } from "@solana/web3.js";
 import { multiplyBigNumbers } from "../utils/utils";
 import { BN } from "@project-serum/anchor";
 
 export async function depositToMeteoraVault(
   depositVault: DepositVault,
-): Promise<VersionedTransaction> {
+): Promise<Transaction> {
   const vaultImpl = await createMeteoraVault(
     depositVault?.depositToken?.tokenInfo?.address,
   );
@@ -22,9 +22,5 @@ export async function depositToMeteoraVault(
         .toString(),
     ),
   );
-  let meteoraDepositTxBuf = meteoraDepositTx.serialize({
-    requireAllSignatures: false,
-    verifySignatures: false,
-  });
-  return meteoraDepositTxBuf.toString("base64");
+  return meteoraDepositTx;
 }

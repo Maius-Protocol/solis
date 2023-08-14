@@ -1,26 +1,26 @@
-import { VersionedTransaction } from "@solana/web3.js";
 import {
-  DepositVault,
-  SwapAndDepositVaultInput,
-  SwapAndDepositVaultResponse,
-} from "../types/vault";
+  AddressLookupTableAccount,
+  PublicKey,
+  TransactionMessage,
+  VersionedTransaction,
+} from "@solana/web3.js";
+import { DepositVault, SwapAndDepositVaultInput } from "../types/vault";
 import { CombinationSwapRouteInput } from "../types/swap";
 import { buildSwapTransactions } from "./buildSwapTransactions";
 import { depositToMeteoraVault } from "./depositToMeteoraVault";
-import shyft from "../adapters/shyft";
 import { TokenInfo } from "@solana/spl-token-registry";
-import { tokenMap } from "../constant/web3";
+import { mainnetConnection, tokenMap } from "../constant/web3";
+import {
+  getAssociatedTokenAddress,
+  createAssociatedTokenAccountInstruction,
+} from "@solana/spl-token";
 
 export async function swapAndDepositVault(
   input: SwapAndDepositVaultInput,
-): Promise<SwapAndDepositVaultResponse> {
+): Promise<VersionedTransaction[]> {
   const depositVaultToken = tokenMap.find(
     (token) => token.address === input?.depositMint,
   ) as TokenInfo;
-
-  let resp: SwapAndDepositVaultResponse = {
-    txs: [],
-  };
 
   let combinationSwapRouteInput: CombinationSwapRouteInput = {
     walletAddress: input?.walletAddress,
@@ -46,5 +46,42 @@ export async function swapAndDepositVault(
 
   let depositTx = await depositToMeteoraVault(depositVault);
 
-  return [...swapTxs, depositTx];
+  let ata = await getAssociatedTokenAddress(
+    new PublicKey(input?.depositMint), // mint
+    new PublicKey(input?.walletAddress), // owner
+  );
+
+  let createATAInstruction = await createAssociatedTokenAccountInstruction(
+    new PublicKey(input?.walletAddress), // payer
+    ata, // ata
+    new PublicKey(input?.walletAddress), // owner
+    new PublicKey(input?.depositMint), // mint
+  );
+
+  let swapTxOriginal = swapTxs[0];
+  const addressLookupTableAccounts = await Promise.all(
+    swapTxOriginal.message.addressTableLookups.map(async (lookup) => {
+      return new AddressLookupTableAccount({
+        key: lookup.accountKey,
+        state: AddressLookupTableAccount.deserialize(
+          await mainnetConnection
+            .getAccountInfo(lookup.accountKey)
+            .then((res) => {
+              return res!.data;
+            }),
+        ),
+      });
+    }),
+  );
+
+  var message = TransactionMessage.decompile(swapTxOriginal.message, {
+    addressLookupTableAccounts: addressLookupTableAccounts,
+  });
+  message.instructions.push(createATAInstruction);
+  message.instructions.push(...depositTx.instructions);
+  swapTxOriginal.message = message.compileToV0Message(
+    addressLookupTableAccounts,
+  );
+
+  return [swapTxOriginal];
 }
