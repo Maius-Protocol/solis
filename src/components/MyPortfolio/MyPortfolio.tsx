@@ -1,13 +1,14 @@
 import { SolisTheme } from "../../constants/theme";
-import { Avatar, Card, Divider, List, Tag, Typography } from "antd";
+import { Avatar, Card, Divider, List, Spin, Tag, Typography } from "antd";
 import { tokenMap } from "../../constants/token";
 import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance";
 import { formatTokenAmount } from "../../util/formater";
+import { usePublicKeys } from "../../hooks/xnft-hooks";
 
 const MyPortfolio = () => {
-  const { data, isRefetching } = useUserMeteoraVaultBalance(
-    "AdN1fhqj9Jw6CyYLbxkWoSqhdwSj72k5ioEJX3RME7Dd",
-  );
+  const keys = usePublicKeys();
+  const userWalletAddress = keys?.solana?.toString();
+  const { data, isRefetching } = useUserMeteoraVaultBalance(userWalletAddress!);
   return (
     <div
       style={{
@@ -21,6 +22,7 @@ const MyPortfolio = () => {
         My Portfolio
       </Typography.Title>
       <Divider style={{ margin: "12px 0" }} />
+      {isRefetching && <Spin />}
       <List
         loading={isRefetching}
         itemLayout="horizontal"
@@ -30,6 +32,7 @@ const MyPortfolio = () => {
           const tokenInfo = tokenMap.find(
             (token) => token.address === balance.token,
           );
+          console.log(balance);
           return (
             <List.Item style={{ padding: "4px 0" }}>
               <Card style={{ width: "100%", margin: 0 }}>
