@@ -187,7 +187,7 @@ export default {
           slugsMe: null,
           // And/or query by what's displayed in the URL on Tensor
           slugsDisplay: null,
-          // Query by a collection's UUID (same as whitelist `uuid` onchain)
+          // Query by a collections's UUID (same as whitelist `uuid` onchain)
           ids: null,
           sortBy: "statsOverall.volume24h:desc", // Which field to sort by
           limit: 50, // Max: 50

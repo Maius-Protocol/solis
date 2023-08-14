@@ -19,7 +19,7 @@ import { getAllVaultInfo } from "../service/meteora-vault";
 
 type RootStackParamList = {
   List: {};
-  Detail: { id: string };
+  DetailCollection: { id: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -64,7 +64,7 @@ function List({
   const { data, loading } = useTokenData();
 
   const handlePressTokenRow = (id: string) => {
-    navigation.push("Detail", { id });
+    navigation.push("DetailCollection", { id });
   };
 
   if (loading) {
@@ -100,9 +100,9 @@ function List({
   );
 }
 
-function Detail({
+function DetailCollection({
   route,
-}: NativeStackScreenProps<RootStackParamList, "Detail">) {
+}: NativeStackScreenProps<RootStackParamList, "DetailCollection">) {
   const { data, loading } = useTokenData();
   const { id } = route.params;
 
@@ -188,9 +188,9 @@ export const TokenListNavigator = () => {
         options={{ title: "Token List" }}
       />
       <Stack.Screen
-        name="Detail"
-        component={Detail}
-        options={{ title: "Token Detail" }}
+        name="DetailCollection"
+        component={DetailCollection}
+        options={{ title: "Token DetailCollection" }}
       />
     </Stack.Navigator>
   );
