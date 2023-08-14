@@ -175,8 +175,8 @@ export default {
                         numListed
                         numMints
                       }
-                      firstListDate
                       name
+                      imageUri
                     }
                   }
                 }`,
