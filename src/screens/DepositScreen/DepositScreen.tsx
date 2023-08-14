@@ -6,6 +6,7 @@ import {
   Divider,
   Dropdown,
   InputNumber,
+  message,
   Table,
   Typography,
 } from "antd";
@@ -17,21 +18,21 @@ import useMeteoraVaultsInfo from "../../service/useMeteoraVaultsInfo";
 import { useForm } from "react-hook-form";
 import { findToken } from "../../constants/token";
 import useSwapAndDeposit from "../../service/useSwapAndDeposit";
-import {
-  AddressLookupTableAccount,
-  Message,
-  PublicKey,
-  sendAndConfirmRawTransaction,
-  Transaction,
-  TransactionMessage,
-  VersionedTransaction,
-} from "@solana/web3.js";
-import { Buffer } from "buffer";
-import VerifiedSignatureProgress from "../../components/VerifiedSignatureProgress";
+import useSignAndConfirmSolis from "../../service/useSignAndConfirmSolis";
+import { VersionedTransaction } from "@solana/web3.js";
+const bs58 = require("bs58");
+
+const async = require("async");
+
+function timeout(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 const DepositScreen = () => {
-  const [signedTxs, setSignedTxs] = useState();
   const provider = useSolanaProvider();
+  const [messageApi, contextHolder] = message.useMessage();
   const sendAndConfirm = provider?.sendAndConfirm;
+  const { mutateAsync: sendAndConfirmSolis, isLoading: isSendingAndConfirm } =
+    useSignAndConfirmSolis();
   const { watch, setValue, register, getValues } = useForm();
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
@@ -124,69 +125,23 @@ const DepositScreen = () => {
       }),
     });
     const txs = _response?.data?.data || [];
-    console.log(_response?.data);
-    const connection = window.xnft.solana.connection;
-
-    // const _signedTransactions = await window.xnft.solana.signAllTransactions(
-    //   txs?.map((tx) => {
-    //     const transactionDecoded = new Buffer(tx!, "base64");
-    //     const transaction =
-    //       VersionedTransaction.deserialize(transactionDecoded);
-    //     return transaction;
-    //     // transaction.sign([new PublicKey(userWalletAddress)]);
-    //   }),
-    // );
-
-    const swap = VersionedTransaction.deserialize(new Buffer(txs[0], "base64"));
-    const _deposit = Transaction.from(new Buffer(txs[1], "base64"));
-    const addressLookupTableAccounts = await Promise.all(
-      swap.message.addressTableLookups.map(async (lookup) => {
-        return new AddressLookupTableAccount({
-          key: lookup.accountKey,
-          state: AddressLookupTableAccount.deserialize(
-            await connection.getAccountInfo(lookup.accountKey).then((res) => {
-              return res.data;
-            }),
-          ),
-        });
-      }),
-    );
-    var message = TransactionMessage.decompile(swap.message, {
-      addressLookupTableAccounts: addressLookupTableAccounts,
+    let _transactions = txs.map((tx) => {
+      const transactionDecoded = new Buffer(tx!, "base64");
+      const transaction = VersionedTransaction.deserialize(transactionDecoded);
+      return transaction;
     });
-    message.instructions.push(..._deposit.instructions);
-    swap.message = message.compileToV0Message(addressLookupTableAccounts);
-
-    const combinedSigned = await window.xnft.solana.signTransaction(swap);
-    // const sig = await window.xnft.solana.send(swap);
-
-    const rawTransaction = combinedSigned.serialize();
-    const txid = await connection.sendRawTransaction(
-      Buffer.from(rawTransaction),
-      {
-        skipPreflight: true,
-        commitment: "confirmed",
-        maxRetries: 2,
-      },
-    );
-
-    console.log(txid);
-    // async function sendTransactionsSequentially() {
-    //   for (const tx of _signedTransactions) {
-    //     console.log("start working: ", tx);
-    //     const sig = await window.xnft.solana.sendAndConfirm(tx);
-    //     // await new Promise((resolve) => setTimeout(resolve, 10000));
-    //     console.log("signature: ", sig);
-    //   }
-    // }
-    // await sendTransactionsSequentially();
-
-    // await Promise.all(
-    //   [_signedTransactions[1]].map(async (tx) => {
-    //     const signature = await window.xnft.solana.sendAndConfirm(tx);
-    //     console.log("signature", signature);
-    //   }),
-    // );
+    _transactions = await window.xnft.solana.signAllTransactions(_transactions);
+    for (const e of _transactions) {
+      const serializedTransaction = bs58.encode(
+        e.serialize({ verifySignatures: false }),
+      );
+      const { data } = await sendAndConfirmSolis(serializedTransaction);
+      message.success(
+        <a target="_blank" href={`https://solscan.io/tx/${data?.signature}`}>
+          View this transaction on Solscan
+        </a>,
+      );
+    }
   };
 
   useEffect(() => {
@@ -282,18 +237,20 @@ const DepositScreen = () => {
         size="large"
         style={{
           position: "absolute",
-          bottom: 32,
+          bottom: 80,
           width: "96%",
         }}
         disabled={disabled}
         onClick={onSubmit}
-        loading={isMutating}
+        loading={isMutating || isSendingAndConfirm}
       >
         <div className="d-flex align-items-center justify-content-center">
           <SendOutlined style={{ marginRight: "6px" }} />
           Deposit
         </div>
       </Button>
+
+      {contextHolder}
     </div>
   );
 };

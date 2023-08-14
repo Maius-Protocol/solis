@@ -9,6 +9,7 @@ export const ApiRoutes = {
   userMeteoraVaultBalance: (userWalletAddress: string) =>
     `/vault?address=${userWalletAddress}`,
   swapAndDeposit: "vault/deposit",
+  sendAndConfirm: "transaction/send-and-confirm",
 };
 
 export default axiosInstance;

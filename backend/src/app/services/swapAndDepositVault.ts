@@ -18,10 +18,6 @@ export async function swapAndDepositVault(
     (token) => token.address === input?.depositMint,
   ) as TokenInfo;
 
-  let resp: SwapAndDepositVaultResponse = {
-    txs: [],
-  };
-
   let combinationSwapRouteInput: CombinationSwapRouteInput = {
     walletAddress: input?.walletAddress,
     outputToken: {

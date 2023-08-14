@@ -1,9 +1,9 @@
 import { StaticTokenListResolutionStrategy } from "@solana/spl-token-registry";
 import { Connection } from "@solana/web3.js";
 import { HELIUS_API_KEY } from "../../../env";
-
 export const mainnetConnection = new Connection(
   `https://rpc.helius.xyz/?api-key=${HELIUS_API_KEY}`,
+  "confirmed",
 );
 
 export const tokenMap = new StaticTokenListResolutionStrategy().resolve();
