@@ -3,7 +3,7 @@ import { WithdrawAndBuyNftInput, WithdrawVault } from "@/app/types/vault";
 import { TokenInfo } from "@solana/spl-token-registry";
 import { Transaction } from "@solana/web3.js";
 import { withdrawMeteoraVault } from "../vault/withdrawMeteoraVault";
-import { buyNftWithTensorSwap } from "../buy/buyNftWithTensorswap";
+import { buyNftWithTensorSwap } from "../nft/buyNftWithTensorswap";
 import { BuyNFTListing } from "@/app/types/token";
 import { multiplyBigNumbers } from "@/app/utils/utils";
 
