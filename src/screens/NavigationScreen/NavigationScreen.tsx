@@ -13,6 +13,7 @@ import SolisAppHeaderLite from "../../components/SolisAppHeader/SolisAppHeaderLi
 import WithdrawalScreen from "../WithdrawalScreen/WithdrawalScreen";
 import TransferScreen from "../TransferScreen/TransferScreen";
 import BuyScreen from "../BuyScreen/BuyScreen";
+import DetailCollectionScreen from "../CollectionScreen/DetailCollection";
 
 const forSlide: StackCardStyleInterpolator = ({
   current,
@@ -96,6 +97,10 @@ const NavigationScreen = () => {
           />
           <Stack.Screen name={RouteNames.TRANSFER} component={TransferScreen} />
           <Stack.Screen name={RouteNames.BUY} component={BuyScreen} />
+          <Stack.Screen
+            name={RouteNames.DETAIL_COLLECTION}
+            component={DetailCollectionScreen}
+          />
         </Stack.Navigator>
         {/*<TabNavigator />*/}
       </NavigationContainer>
