@@ -39,7 +39,7 @@ export default {
           owner: owner,
         },
       })
-      .json<any>((r) => r.data);
+      .json<any>((r: any) => r.data);
   },
   listSingleNft: (owner: string, price: string, mint: string) => {
     return api
@@ -60,7 +60,7 @@ export default {
           price: price,
         },
       })
-      .json<any>((r) => r.data);
+      .json<any>((r: any) => r.data);
   },
   getActiveListing: (slug: string) => {
     return api
@@ -111,7 +111,7 @@ export default {
           cursor: null,
         },
       })
-      .json<any>((r) => r.data);
+      .json<any>((r: any) => r.data);
   },
   getInstrument: (slug: string) => {
     return api
@@ -135,6 +135,65 @@ export default {
           slug: slug,
         },
       })
-      .json<any>((r) => r.data);
+      .json<any>((r: any) => r.data);
+  },
+  listCollections: () => {
+    return api
+      .url("/")
+      .headers({ "X-TENSOR-API-KEY": TENSOR_SWAP_API_KEY || "" })
+      .post({
+        query: `query CollectionsStats(
+                  $slugs: [String!],
+                  $slugsMe: [String!], 
+                  $slugsDisplay: [String!], 
+                  $ids: [String!],
+                  $sortBy: String,
+                  $page: Int,
+                  $limit: Int, 
+                ) {
+                  allCollections(
+                    slugs: $slugs,
+                    slugsMe: $slugsMe,
+                    slugsDisplay: $slugsDisplay,  
+                    ids: $ids,
+                    sortBy: $sortBy,
+                    page: $page,
+                    limit: $limit
+                  ) {
+                    total
+                    collections {
+                      id 
+                      slug 
+                      slugMe 
+                      slugDisplay 
+                      statsV2 {
+                        currency
+                        buyNowPrice
+                        buyNowPriceNetFees
+                        sellNowPrice
+                        sellNowPriceNetFees
+                        numListed
+                        numMints
+                      }
+                      firstListDate
+                      name
+                    }
+                  }
+                }`,
+        variables: {
+          // Set as `null` to fetch all
+          slugs: null,
+          // Can also query by MagicEden's symbol
+          slugsMe: null,
+          // And/or query by what's displayed in the URL on Tensor
+          slugsDisplay: null,
+          // Query by a collection's UUID (same as whitelist `uuid` onchain)
+          ids: null,
+          sortBy: "statsOverall.volume24h:desc", // Which field to sort by
+          limit: 50, // Max: 50
+          page: 1, // For pagination (since max 50 per query)
+        },
+      })
+      .json<any>((r: any) => r.data);
   },
 };

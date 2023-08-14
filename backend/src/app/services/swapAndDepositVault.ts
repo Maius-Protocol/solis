@@ -7,7 +7,6 @@ import {
 import { CombinationSwapRouteInput } from "../types/swap";
 import { buildSwapTransactions } from "./buildSwapTransactions";
 import { depositToMeteoraVault } from "./depositToMeteoraVault";
-import shyft from "../adapters/shyft";
 import { TokenInfo } from "@solana/spl-token-registry";
 import { tokenMap } from "../constant/web3";
 
