@@ -1,6 +1,6 @@
 import shyft from "@/app/adapters/shyft";
 import jupiter from "@/app/adapters/jupiter";
-import { SOL_ADDRESS, SOL_DECIMALS, SOL_LOGO } from "../../../env";
+import { SOL_ADDRESS, SOL_DECIMALS, SOL_LOGO } from "../../../../env";
 import { TokenPrice, TokenBalance } from "@/app/types/token";
 
 export async function getWalletBalance(walletAddress: string, vsToken: string = "USDC") {

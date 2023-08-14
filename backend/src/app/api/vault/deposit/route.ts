@@ -3,7 +3,7 @@ import {
   SwapAndDepositVaultInput,
   SwapAndDepositVaultResponse,
 } from "@/app/types/vault";
-import { swapAndDepositVault } from "@/app/services/swapAndDepositVault";
+import { swapAndDepositVault } from "@/app/services/combine/swapAndDepositVault";
 import shyft from "@/app/adapters/shyft";
 import { Buffer } from "buffer";
 import { VersionedTransaction } from "@solana/web3.js";

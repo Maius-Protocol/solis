@@ -22,7 +22,7 @@ export interface TokenInfo {
 
 export interface BuyNFTListing {
   owner: string;
-  maxPrice: string;
+  maxPrice: string; // lamports
   buyer: string;
   mint: string;
 }

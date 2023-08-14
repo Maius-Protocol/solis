@@ -11,9 +11,11 @@ export interface DepositVault {
 }
 
 export interface WithdrawVault {
-    publicKey: string;
-    mint: string;
-    amount: string;
+    userPubkey: string;
+    withdrawToken: {
+        tokenInfo: TokenInfo,
+        amount: number
+    }
 }
 
 export interface SwapAndDepositVaultInput {
@@ -26,4 +28,12 @@ export interface SwapAndDepositVaultInput {
 
 export interface SwapAndDepositVaultResponse {
     txs: VersionedTransaction[]
+}
+
+export interface WithdrawAndBuyNftInput {
+    walletAddress: string,
+    vaultTokenMint: string,
+    nftPrice: number // NFT's price in SOL
+    nftOwner: string,
+    nftMint: string,
 }

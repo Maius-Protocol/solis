@@ -1,5 +1,5 @@
 import { tokenVault } from "@/app/constant/web3";
-import { createMeteoraVault } from "@/app/services/createMeteoraVault";
+import { createMeteoraVault } from "@/app/services/vault/createMeteoraVault";
 import { PublicKey } from "@solana/web3.js";
 import { UserVaultBalance } from "@/app/types/balance";
 

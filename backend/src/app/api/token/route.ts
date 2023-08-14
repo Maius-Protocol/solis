@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getWalletBalance } from "@/app/services/getWalletBalance";
+import { getWalletBalance } from "@/app/services/wallet/getWalletBalance";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
