@@ -47,7 +47,6 @@ export async function withdrawAndBuyNft(
     withdrawAndBuyNftTx.add(withdrawVaultTx);
     withdrawAndBuyNftTx.add(buyNftTx);
   }
-  console.log(withdrawAndBuyNftTx.instructions);
   withdrawAndBuyNftTx.feePayer = new PublicKey(input.walletAddress);
   withdrawAndBuyNftTx.recentBlockhash = (
     await mainnetConnection.getLatestBlockhash()
