@@ -4,6 +4,8 @@ import CountUp from "react-countup";
 import React from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import SolisActionsCard from "../SolisActionsCard/SolisActionsCard";
+import { Image } from "react-native";
+import Images from "../../assets";
 
 const Header = styled.div`
   height: 40%;
@@ -34,13 +36,15 @@ const SolisAppHeader = () => {
   return (
     <div className="d-flex flex-column">
       <Header className="px-3 d-flex flex-column justify-content-between align-items-start">
-        <Typography.Title
-          style={{ color: "white", margin: 0, marginTop: "24px" }}
-          level={4}
-        >
-          solis logo
-        </Typography.Title>
-
+        <img
+          style={{
+            margin: 0,
+            marginTop: "12px",
+            marginLeft: "-12px",
+            width: 64,
+          }}
+          src={Images.logo}
+        />
         <div
           style={{ marginBottom: "64px" }}
           className="w-100 d-flex flex-row align-items-center justify-content-between"

@@ -1,28 +1,79 @@
-import userListTensorCollections from "../../service/useListTensorCollections";
 import { SolisTheme } from "../../constants/theme";
-import { Avatar, Card, Divider, List, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Divider,
+  Empty,
+  Image,
+  Skeleton,
+  Typography,
+} from "antd";
 import useActiveListing from "../../service/useActiveListings";
-import { useParams } from "next/navigation";
 import { formatTokenAmount } from "../../util/formater";
-import useListTensorCollections from "../../service/useListTensorCollections";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import useWithdrawAndBuyNft from "../../service/useWithdrawAndBuyNft";
-import { usePublicKeys } from "../../hooks/xnft-hooks";
-import { Transaction, VersionedTransaction } from "@solana/web3.js";
-const DetailCollectionScreen = () => {
+import { useDimensions, usePublicKeys } from "../../hooks/xnft-hooks";
+import { VersionedTransaction } from "@solana/web3.js";
+
+const NFT = ({ nft }) => {
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
-  const { mutateAsync: createInstructions } =
+  const { width } = useDimensions();
+  const { mutateAsync: createInstructions, isLoading: isUpdating } =
     useWithdrawAndBuyNft(userWalletAddress);
-  const route = useRoute();
-  // const slug = route?.params?.slug
-  const slug = "urs01";
+  return (
+    <div className="p-2">
+      <Card bodyStyle={{ padding: "12px" }} style={{ margin: 0 }}>
+        <div className="d-flex flex-column align-items-center justify-content-center text-center">
+          <div>
+            <Image
+              width={width < 640 ? width * 0.35 : width * 0.4}
+              height={width < 640 ? width * 0.35 : width * 0.4}
+              style={{ borderRadius: 12 }}
+              src={nft?.metadata?.image}
+            />
+          </div>
+          <div className="mt-2">
+            <Typography.Title level={5} style={{ margin: 0 }}>
+              {nft?.metadata?.name}
+            </Typography.Title>
+
+            <Button
+              onClick={async () => {
+                const instructions = await createInstructions({
+                  nftPrice: parseInt(nft.price) / 1_000_000_000,
+                  nftOwner: nft.seller,
+                  nftMint: nft.mint,
+                });
+                const tx = VersionedTransaction.deserialize(
+                  new Buffer.from(instructions?.data?.data, "base64"),
+                );
+                window.xnft.solana.sendAndConfirm(tx);
+              }}
+              type="primary"
+              className="mt-4"
+              loading={isUpdating}
+            >
+              Buy with {formatTokenAmount(nft?.price, 9)} {"SOL"}
+            </Button>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+const DetailCollectionScreen = ({ url }) => {
+  const slug = url?.split("/").pop();
+
   const { data, isLoading } = useActiveListing(slug as string);
 
+  if (!slug || slug === "") {
+    return <Empty />;
+  }
   return (
     <div
       style={{
-        height: "60%",
+        height: "100%",
         overflowY: "scroll",
         backgroundColor: SolisTheme.background,
       }}
@@ -32,53 +83,14 @@ const DetailCollectionScreen = () => {
         Active Listing
       </Typography.Title>
       <Divider style={{ margin: "12px 0" }} />
-      <List
-        loading={isLoading}
-        itemLayout="horizontal"
-        split={false}
-        dataSource={data}
-        renderItem={(nft, index) => {
-          console.log(nft);
-          return (
-            <List.Item style={{ padding: "4px 0" }}>
-              <Card
-                onClick={async () => {
-                  const instructions = await createInstructions({
-                    nftPrice: parseInt(nft.price) / 1_000_000_000,
-                    nftOwner: nft.seller,
-                    nftMint: nft.mint,
-                  });
-                  const tx = VersionedTransaction.deserialize(
-                    new Buffer.from(instructions?.data?.data, "base64"),
-                  );
-                  window.xnft.solana.sendAndConfirm(tx);
-                }}
-                style={{ width: "100%", margin: 0 }}
-              >
-                <div className="d-flex flex-row ">
-                  <div style={{ marginRight: "12px" }}>
-                    <Avatar
-                      size={48}
-                      src={
-                        nft?.metadata?.image ??
-                        `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Typography.Title level={5} style={{ margin: 0 }}>
-                      {nft?.metadata?.name}
-                    </Typography.Title>
-                    <Typography.Text>
-                      Price: {formatTokenAmount(nft?.price, 9)} {"SOL"}
-                    </Typography.Text>
-                  </div>
-                </div>
-              </Card>
-            </List.Item>
-          );
-        }}
-      />
+      {isLoading && <Skeleton />}
+      {!isLoading && (
+        <div className="d-flex flex-row flex-wrap align-items-center justify-content-center text-center">
+          {data?.map((nft) => {
+            return <NFT nft={nft} />;
+          })}
+        </div>
+      )}
     </div>
   );
 };
