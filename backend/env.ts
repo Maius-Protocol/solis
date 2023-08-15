@@ -25,8 +25,6 @@ export const TENSOR_SWAP_API_KEY = process.env.TENSOR_SWAP_API_KEY || "";
 export const TENSOR_SWAP_API =
   process.env.TENSOR_SWAP_API || "https://api.tensor.so/graphql";
 
-export const SECRET_KEY = process.env.SECRET_KEY || "";
-
 export const COVALENTHQ_API =
   process.env.COVALENTHQ_API || "https://api.covalenthq.com/v1/solana-mainnet";
 export const COVALENT_API_KEYS = process.env.COVALENT_API_KEYS || "";

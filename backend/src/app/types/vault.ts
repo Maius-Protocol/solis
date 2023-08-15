@@ -1,39 +1,52 @@
-import { VersionedTransaction } from "@solana/web3.js"
-import { ManualSwapTokenInput, CombinationSwapMode } from "./swap"
-import { TokenInfo } from "./token"
+import { VersionedTransaction } from "@solana/web3.js";
+import { ManualSwapTokenInput, CombinationSwapMode } from "./swap";
+import { TokenInfo } from "./token";
 
 export interface DepositVault {
-    userPubkey: string;
-    depositToken: {
-        tokenInfo: TokenInfo,
-        amount: number
-    }
+  userPubkey: string;
+  depositToken: {
+    tokenInfo: TokenInfo;
+    amount: number;
+  };
 }
 
 export interface WithdrawVault {
-    userPubkey: string;
-    withdrawToken: {
-        tokenInfo: TokenInfo,
-        amount: number
-    }
+  userPubkey: string;
+  withdrawToken: {
+    tokenInfo: TokenInfo;
+    amount: number;
+  };
 }
 
 export interface SwapAndDepositVaultInput {
-    walletAddress: string,
-    manualSwapTokenInputList: ManualSwapTokenInput[]
-    mode: CombinationSwapMode
-    depositMint: string;
-    amount: number;
+  walletAddress: string;
+  manualSwapTokenInputList: ManualSwapTokenInput[];
+  mode: CombinationSwapMode;
+  depositMint: string;
+  amount: number;
 }
 
 export interface SwapAndDepositVaultResponse {
-    txs: VersionedTransaction[]
+  txs: VersionedTransaction[];
 }
 
 export interface WithdrawAndBuyNftInput {
-    walletAddress: string,
-    vaultTokenMint: string,
-    nftPrice: number // NFT's price in SOL
-    nftOwner: string,
-    nftMint: string,
+  walletAddress: string;
+  vaultTokenMint: string;
+  nftPrice: number; // NFT's price in SOL
+  nftOwner: string;
+  nftMint: string;
+}
+
+export interface WithdrawAndTransferInput {
+  sender: string;
+  vaultTokenMint: string;
+  amount: number;
+  receiver: string;
+}
+
+export interface WithdrawInput {
+  walletAddress: string;
+  vaultTokenMint: string;
+  amount: number;
 }
