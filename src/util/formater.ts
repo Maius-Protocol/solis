@@ -26,3 +26,12 @@ export function formatTokenAmount(amount: string, decimals: number) {
 export function formatTokenAmountNotFixed(amount: string, decimals: number) {
   return (+amount / Math.pow(10, decimals)).toFixed(decimals);
 }
+
+export function isNumber(value: string) {
+  const conv = +value;
+  if (conv) {
+    return true;
+  } else {
+    return false;
+  }
+}
