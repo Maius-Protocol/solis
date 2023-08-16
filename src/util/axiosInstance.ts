@@ -14,6 +14,7 @@ export const ApiRoutes = {
   listCollection: "/tensor/collections",
   activeListing: (slug: string) => `/tensor/listing?slug=${slug}`,
   withdrawAndBuy: "vault/buy",
+  withdraw: "vault/withdraw",
 };
 
 export default axiosInstance;

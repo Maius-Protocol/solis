@@ -23,3 +23,6 @@ export function nFormatter(num: number, digits: number) {
 export function formatTokenAmount(amount: string, decimals: number) {
   return (+amount / Math.pow(10, decimals)).toFixed(2);
 }
+export function formatTokenAmountNotFixed(amount: string, decimals: number) {
+  return (+amount / Math.pow(10, decimals)).toFixed(decimals);
+}
