@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { SOLIS_BACKEND_URL } from "../constants/url";
-import axios from "axios";
 import axiosInstance, { ApiRoutes } from "../util/axiosInstance";
 
 function useUserMeteoraVaultBalance(userWalletAddress: string) {

@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { Statistic, Typography } from "antd";
+import { Statistic } from "antd";
 import CountUp from "react-countup";
 import React from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import SolisActionsCard from "../SolisActionsCard/SolisActionsCard";
-import { Image } from "react-native";
 import Images from "../../assets";
 
 const Header = styled.div`

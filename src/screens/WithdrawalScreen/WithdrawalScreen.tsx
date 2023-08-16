@@ -5,7 +5,7 @@ import { findToken } from "../../constants/token";
 import React, { useEffect, useState } from "react";
 import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance";
 import { usePublicKeys } from "../../hooks/xnft-hooks";
-import { formatTokenAmountNotFixed } from "../../util/formater";
+import { formatTokenAmountNotFixed, isNumber } from "../../util/formater";
 import useWithdraw from "../../service/useWithdraw";
 import { VersionedTransaction } from "@solana/web3.js";
 const { Text } = Typography;
@@ -15,6 +15,7 @@ const WithdrawalScreen = () => {
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
   const [amount, setAmount] = useState("");
+  const [disabled, setDisabled] = useState(true);
   const { data: vaults, isRefetching } = useUserMeteoraVaultBalance(
     userWalletAddress!,
   );
@@ -30,9 +31,16 @@ const WithdrawalScreen = () => {
   }, [vaults]);
 
   const handleMaxAmount = async () => {
-    setAmount(
-      formatTokenAmountNotFixed(vault.lpTokenAmount, token?.decimals || 1),
+    const maxAmount = formatTokenAmountNotFixed(
+      vault.lpTokenAmount,
+      token?.decimals || 1,
     );
+    setAmount(maxAmount);
+    if (maxAmount && isNumber(maxAmount)) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   };
 
   const onSubmit = async () => {
@@ -64,7 +72,29 @@ const WithdrawalScreen = () => {
             <Input
               size="large"
               placeholder="Amount"
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value && isNumber(e.target.value)) {
+                  setDisabled(false);
+                } else {
+                  setDisabled(true);
+                }
+
+                if (
+                  Number(e.target.value) >
+                  Number(
+                    formatTokenAmountNotFixed(
+                      vault.lpTokenAmount,
+                      token?.decimals || 1,
+                    ),
+                  )
+                ) {
+                  e.target.value = formatTokenAmountNotFixed(
+                    vault.lpTokenAmount,
+                    token?.decimals || 1,
+                  );
+                }
+                setAmount(e.target.value);
+              }}
               value={amount}
             />
             <Button size={"large"} onClick={() => handleMaxAmount()}>
@@ -155,7 +185,7 @@ const WithdrawalScreen = () => {
             type="primary"
             block
             size="large"
-            // disabled={disabled}
+            disabled={disabled}
             onClick={onSubmit}
             loading={isUpdating}
           >

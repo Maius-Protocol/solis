@@ -32,7 +32,6 @@ const MyPortfolio = () => {
           const tokenInfo = tokenMap.find(
             (token) => token.address === balance.token,
           );
-          console.log(balance);
           return (
             <List.Item style={{ padding: "4px 0" }}>
               <Card style={{ width: "100%", margin: 0 }}>
