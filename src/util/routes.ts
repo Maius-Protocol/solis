@@ -3,7 +3,7 @@ export enum RouteNames {
   HOME = "HOME",
   DEPOSIT = "DEPOSIT",
   WITHDRAWAL = "WITHDRAWAL",
-  TRANSFER = "TRANSFER",
+  SEND = "SEND",
   BUY = "BUY",
   DETAIL_COLLECTION = "DETAIL_COLLECTION",
 }

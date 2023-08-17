@@ -45,7 +45,7 @@ const SolisActionsCard = () => {
           </Button>
           <Button
             onClick={() => {
-              navigate(RouteNames.TRANSFER);
+              navigate(RouteNames.SEND);
             }}
             style={{ height: 80 }}
             type="text"
@@ -57,7 +57,7 @@ const SolisActionsCard = () => {
                 style={{ width: "36px", height: "36px" }}
               />
             </div>
-            <div>Transfer</div>
+            <div>Send</div>
           </Button>
           <Button
             onClick={() => {
