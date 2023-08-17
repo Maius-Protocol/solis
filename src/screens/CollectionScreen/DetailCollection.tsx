@@ -17,17 +17,20 @@ import { VersionedTransaction } from "@solana/web3.js";
 const NFT = ({ nft }) => {
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
-  const { width } = useDimensions();
+  const { width, height } = useDimensions();
   const { mutateAsync: createInstructions, isLoading: isUpdating } =
     useWithdrawAndBuyNft(userWalletAddress);
   return (
-    <div className="p-2">
-      <Card bodyStyle={{ padding: "12px" }} style={{ margin: 0 }}>
+    <div className="col-6 col-md-4 p-2">
+      <Card
+        bodyStyle={{ padding: "12px" }}
+        style={{ margin: 0, width: "100%" }}
+      >
         <div className="d-flex flex-column align-items-center justify-content-center text-center">
-          <div>
+          <div className="w-100">
             <Image
-              width={width < 640 ? width * 0.35 : width * 0.4}
-              height={width < 640 ? width * 0.35 : width * 0.4}
+              width="100%"
+              height={height * 0.2}
               style={{ borderRadius: 12 }}
               src={nft?.metadata?.image}
             />

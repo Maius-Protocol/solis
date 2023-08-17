@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Button, Typography } from "antd";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import Images from "../../assets";
 
 const Header = styled.div`
   height: 64px;
@@ -40,9 +41,13 @@ const SolisAppHeaderLite = () => {
         </div>
       </Button>
       <div style={{ marginLeft: "-70px" }}>
-        <Typography.Title style={{ color: "white", margin: 0 }} level={4}>
-          solis logo
-        </Typography.Title>
+        <img
+          style={{
+            margin: 0,
+            width: 48,
+          }}
+          src={Images.logo}
+        />
       </div>
       <div />
     </Header>

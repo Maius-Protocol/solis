@@ -73,7 +73,7 @@ const SolisActionsCard = () => {
                 style={{ width: "36px", height: "36px" }}
               />
             </div>
-            <div>Buy</div>
+            <div>Buy NFTs</div>
           </Button>
         </div>
       </Card>

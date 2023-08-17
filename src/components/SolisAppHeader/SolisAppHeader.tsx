@@ -5,10 +5,12 @@ import React from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import SolisActionsCard from "../SolisActionsCard/SolisActionsCard";
 import Images from "../../assets";
+import YourTotalSavings from "./YourTotalSavings";
+import { usePublicKeys } from "../../hooks/xnft-hooks";
 
 const Header = styled.div`
-  height: 40%;
-  min-height: 240px;
+  height: 60%;
+  min-height: 320px;
   width: 100%;
   background: #ff9966; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -21,17 +23,13 @@ const Header = styled.div`
     #ff9966,
     #ff5e62
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-image: url("${Images.background}");
+  background-size: cover;
 `;
 
-const formatter = (value: number) => (
-  <CountUp
-    end={value}
-    style={{ color: "white", fontWeight: "bold" }}
-    separator=","
-  />
-);
-
 const SolisAppHeader = () => {
+  const keys = usePublicKeys();
+  const userWalletAddress = keys?.solana?.toString();
   return (
     <div className="d-flex flex-column">
       <Header className="px-3 d-flex flex-column justify-content-between align-items-start">
@@ -44,18 +42,29 @@ const SolisAppHeader = () => {
           }}
           src={Images.logo}
         />
+        <Statistic
+          title={<b style={{ color: "white" }}>Welcome back!,</b>}
+          valueRender={() => (
+            <div
+              style={{
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {userWalletAddress}
+            </div>
+          )}
+          valueStyle={{
+            color: "white",
+            width: "250px",
+          }}
+        />
         <div
           style={{ marginBottom: "64px" }}
           className="w-100 d-flex flex-row align-items-center justify-content-between"
         >
-          <Statistic
-            title={<span style={{ color: "white" }}>Your total savings</span>}
-            value={20}
-            precision={2}
-            suffix={`/ ${1000} USD`}
-            valueStyle={{ color: "white" }}
-            formatter={formatter}
-          />
+          <YourTotalSavings />
           <Statistic
             title={<span style={{ color: "white" }}>Today APY</span>}
             value={3.2}
