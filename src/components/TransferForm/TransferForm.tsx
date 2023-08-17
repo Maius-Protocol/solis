@@ -11,13 +11,21 @@ import {
 import { findToken } from "../../constants/token";
 import { formatTokenAmountNotFixed, isNumber } from "../../util/formater";
 import { CaretDownOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance";
+import { usePublicKeys } from "../../hooks/xnft-hooks";
 
-const TransferForm = ({ formProps }) => {
+const { Text } = Typography;
+
+const TransferForm = ({ formProps, onSubmit, isUpdating, type }) => {
+  const isWithdrawal = type === "withdrawal";
+  const keys = usePublicKeys();
+  const userWalletAddress = keys?.solana?.toString();
   const { watch, setValue, register, getValues } = formProps;
   const { data: vaults } = useUserMeteoraVaultBalance(userWalletAddress!);
   const selectedVault = watch("selectedVault");
+  const amount = watch("amount");
+  const address = watch("address");
   const token = findToken(selectedVault);
   const vault = vaults?.find((e) => e.token === selectedVault);
   const maxAmount = vault?.lpTokenAmount
@@ -25,19 +33,31 @@ const TransferForm = ({ formProps }) => {
     : "0";
 
   const handleMaxAmount = async () => {
-    setAmount(maxAmount);
+    setValue("amount", maxAmount);
   };
 
   const disabled =
     "" ||
     !isNumber(amount) ||
     Number(amount) > Number(maxAmount) ||
-    Number(amount) < 0;
+    Number(amount) < 0 ||
+    address === "" ||
+    !address;
+
+  useEffect(() => {
+    if (isWithdrawal && userWalletAddress) {
+      setValue("address", userWalletAddress);
+    }
+  }, [userWalletAddress]);
 
   return (
     <div className="px-2 mt-3">
       <Card
-        title="Withdrawal to your wallet"
+        title={
+          isWithdrawal
+            ? "Withdrawal to your wallet"
+            : "Withdrawal to below wallet"
+        }
         style={{ width: "100%", margin: 0 }}
       >
         <div className="py-2">
@@ -50,7 +70,7 @@ const TransferForm = ({ formProps }) => {
               placeholder="Amount"
               max={maxAmount}
               onChange={(e) => {
-                setAmount(e.target.value);
+                setValue("amount", e.target.value);
               }}
               value={amount}
             />
@@ -69,7 +89,7 @@ const TransferForm = ({ formProps }) => {
             menu={{
               onClick: (e) => {
                 setValue("selectedVault", e?.key);
-                setAmount("");
+                setValue("amount", "");
               },
               items: vaults?.map((e) => {
                 const tokenMap = findToken(e?.token);
@@ -137,6 +157,17 @@ const TransferForm = ({ formProps }) => {
             </Card>
           </Dropdown>
         </div>
+        <div className="py-2">
+          <b>To this address</b>
+        </div>
+        <div>
+          <Input
+            disabled={isWithdrawal}
+            value={address}
+            onChange={(e) => setValue("address", e.target.value)}
+            size="large"
+          />
+        </div>
         <Divider />
         <div className="py-2">
           <Button
@@ -148,7 +179,7 @@ const TransferForm = ({ formProps }) => {
             loading={isUpdating}
           >
             <div className="d-flex align-items-center justify-content-center">
-              Withdraw
+              Continue
             </div>
           </Button>
         </div>

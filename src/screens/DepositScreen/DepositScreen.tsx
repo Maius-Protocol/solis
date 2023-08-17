@@ -28,9 +28,7 @@ function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 const DepositScreen = () => {
-  const provider = useSolanaProvider();
   const [messageApi, contextHolder] = message.useMessage();
-  const sendAndConfirm = provider?.sendAndConfirm;
   const { mutateAsync: sendAndConfirmSolis, isLoading: isSendingAndConfirm } =
     useSignAndConfirmSolis();
   const { watch, setValue, register, getValues } = useForm();

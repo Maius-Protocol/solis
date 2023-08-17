@@ -1,37 +1,28 @@
-import {
-  Avatar,
-  Card,
-  Space,
-  Dropdown,
-  Typography,
-  Input,
-  Button,
-  Divider,
-} from "antd";
-import { CaretDownOutlined, SendOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
-import { findToken } from "../../constants/token";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance";
 import { usePublicKeys } from "../../hooks/xnft-hooks";
-import { formatTokenAmountNotFixed, isNumber } from "../../util/formater";
 import useWithdraw from "../../service/useWithdraw";
 import { VersionedTransaction } from "@solana/web3.js";
 import { useNavigation } from "@react-navigation/native";
 import TransferForm from "../../components/TransferForm/TransferForm";
-const { Text } = Typography;
 
 const WithdrawalScreen = () => {
   const navigation = useNavigation();
-  const formProps = useForm();
-  const { watch, setValue, register, getValues } = formProps;
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
-  const [amount, setAmount] = useState("");
+  const { data: vaults } = useUserMeteoraVaultBalance(userWalletAddress!);
+  const formProps = useForm();
+  const { watch, setValue, register, getValues } = formProps;
+  const { refetch } = useUserMeteoraVaultBalance(userWalletAddress!);
+
+  const selectedVault = watch("selectedVault");
+  const vault = vaults?.find((e) => e.token === selectedVault);
   const { mutateAsync: createInstructions, isLoading: isUpdating } =
     useWithdraw();
 
   const onSubmit = async () => {
+    const { amount } = getValues();
     const instructions = await createInstructions({
       userWalletAddress: userWalletAddress!,
       vaultTokenMint: vault?.token,
@@ -40,7 +31,8 @@ const WithdrawalScreen = () => {
     const tx = VersionedTransaction.deserialize(
       new Buffer.from(instructions?.data?.data, "base64"),
     );
-    window.xnft.solana.sendAndConfirm(tx);
+    await window.xnft.solana.sendAndConfirm(tx);
+    refetch();
     navigation.goBack();
   };
 
@@ -50,7 +42,14 @@ const WithdrawalScreen = () => {
     }
   }, [vaults]);
 
-  return <TransferForm formProps={formProps} />;
+  return (
+    <TransferForm
+      formProps={formProps}
+      onSubmit={onSubmit}
+      isUpdating={isUpdating}
+      type={"withdrawal"}
+    />
+  );
 };
 
 export default WithdrawalScreen;

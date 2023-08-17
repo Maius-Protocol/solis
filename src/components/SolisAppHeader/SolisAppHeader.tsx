@@ -7,6 +7,7 @@ import SolisActionsCard from "../SolisActionsCard/SolisActionsCard";
 import Images from "../../assets";
 import YourTotalSavings from "./YourTotalSavings";
 import { usePublicKeys } from "../../hooks/xnft-hooks";
+import useMeteoraVaultsInfo from "../../service/useMeteoraVaultsInfo";
 
 const Header = styled.div`
   height: 60%;
@@ -30,6 +31,8 @@ const Header = styled.div`
 const SolisAppHeader = () => {
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
+  const { data: vaults, isLoading: isLoadingVaults } = useMeteoraVaultsInfo();
+
   return (
     <div className="d-flex flex-column">
       <Header className="px-3 d-flex flex-column justify-content-between align-items-start">
@@ -67,8 +70,9 @@ const SolisAppHeader = () => {
           <YourTotalSavings />
           <Statistic
             title={<span style={{ color: "white" }}>Today APY</span>}
-            value={3.2}
+            value={vaults?.[0]?.closest_apy}
             precision={2}
+            isLoadingVaults={isLoadingVaults}
             valueStyle={{ color: "white" }}
             prefix={<ArrowUpOutlined />}
             suffix="%"
