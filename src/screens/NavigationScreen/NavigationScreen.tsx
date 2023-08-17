@@ -11,7 +11,7 @@ import { SolisTheme } from "../../constants/theme";
 import DepositScreen from "../DepositScreen/DepositScreen";
 import SolisAppHeaderLite from "../../components/SolisAppHeader/SolisAppHeaderLite";
 import WithdrawalScreen from "../WithdrawalScreen/WithdrawalScreen";
-import TransferScreen from "../TransferScreen/TransferScreen";
+import SendScreen from "../SendScreen/SendScreen";
 import BuyScreen from "../BuyScreen/BuyScreen";
 import DetailCollectionScreen from "../CollectionScreen/DetailCollection";
 
@@ -95,7 +95,7 @@ const NavigationScreen = () => {
             name={RouteNames.WITHDRAWAL}
             component={WithdrawalScreen}
           />
-          <Stack.Screen name={RouteNames.TRANSFER} component={TransferScreen} />
+          <Stack.Screen name={RouteNames.SEND} component={SendScreen} />
           <Stack.Screen name={RouteNames.BUY} component={BuyScreen} />
           <Stack.Screen
             name={RouteNames.DETAIL_COLLECTION}
