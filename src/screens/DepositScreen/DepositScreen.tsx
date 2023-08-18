@@ -229,24 +229,21 @@ const DepositScreen = () => {
           </div>
         </Card>
       </Dropdown>
-      <Button
-        type="primary"
-        block
-        size="large"
-        style={{
-          position: "absolute",
-          bottom: 80,
-          width: "96%",
-        }}
-        disabled={disabled}
-        onClick={onSubmit}
-        loading={isMutating || isSendingAndConfirm}
-      >
-        <div className="d-flex align-items-center justify-content-center">
-          <SendOutlined style={{ marginRight: "6px" }} />
-          Deposit
-        </div>
-      </Button>
+      <div className={"py-2"}>
+        <Button
+          type="primary"
+          block
+          size="large"
+          disabled={disabled}
+          onClick={onSubmit}
+          loading={isMutating || isSendingAndConfirm}
+        >
+          <div className="d-flex align-items-center justify-content-center">
+            <SendOutlined style={{ marginRight: "6px" }} />
+            Deposit
+          </div>
+        </Button>
+      </div>
 
       {contextHolder}
     </div>
