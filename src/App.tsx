@@ -5,7 +5,7 @@ import { useFonts } from "@expo-google-fonts/dev";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import NavigationScreen from "./screens/NavigationScreen/NavigationScreen";
 import { ConfigProvider } from "antd";
 import lottie from "lottie-web";
@@ -46,7 +46,7 @@ function App() {
       >
         <QueryClientProvider client={queryClient}>
           <NavigationScreen />
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </QueryClientProvider>
       </ConfigProvider>
     </RecoilRoot>
