@@ -46,7 +46,7 @@ const SolisAppHeader = () => {
           src={Images.logo}
         />
         <Statistic
-          title={<b style={{ color: "white" }}>Welcome back!,</b>}
+          title={<b style={{ color: "white" }}>Welcome back!</b>}
           valueRender={() => (
             <div
               style={{

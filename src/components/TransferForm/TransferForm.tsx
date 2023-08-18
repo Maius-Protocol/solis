@@ -53,11 +53,11 @@ const TransferForm = ({ formProps, onSubmit, isUpdating, type }) => {
   return (
     <div className="px-2 mt-3">
       <Card
-        title={
-          isWithdrawal
-            ? "Withdrawal to your wallet"
-            : "Withdrawal to below wallet"
-        }
+        // title={
+        //   isWithdrawal
+        //     ? "Withdraw to your wallet"
+        //     : "Send to wallet below"
+        // }
         style={{ width: "100%", margin: 0 }}
       >
         <div className="py-2">
@@ -81,7 +81,7 @@ const TransferForm = ({ formProps, onSubmit, isUpdating, type }) => {
         </div>
 
         <div className="py-2">
-          <b>From below vault</b>
+          <b>From vault</b>
         </div>
         <div>
           <Dropdown
@@ -158,17 +158,20 @@ const TransferForm = ({ formProps, onSubmit, isUpdating, type }) => {
           </Dropdown>
         </div>
         <div className="py-2">
-          <b>To this address</b>
+          {
+            isWithdrawal ? <></> : <>
+              <div className="py-2">
+                <b>To this address</b>
+              </div>
+              <Input
+                disabled={isWithdrawal}
+                value={address}
+                onChange={(e) => setValue("address", e.target.value)}
+                size="large"
+              />
+            </>
+          }
         </div>
-        <div>
-          <Input
-            disabled={isWithdrawal}
-            value={address}
-            onChange={(e) => setValue("address", e.target.value)}
-            size="large"
-          />
-        </div>
-        <Divider />
         <div className="py-2">
           <Button
             type="primary"
@@ -179,7 +182,11 @@ const TransferForm = ({ formProps, onSubmit, isUpdating, type }) => {
             loading={isUpdating}
           >
             <div className="d-flex align-items-center justify-content-center">
-              Continue
+              {
+                isWithdrawal
+                  ? "Withdraw"
+                  : "Send"
+              }
             </div>
           </Button>
         </div>
