@@ -238,10 +238,13 @@ const DepositScreen = () => {
           onClick={onSubmit}
           loading={isMutating || isSendingAndConfirm}
         >
-          <div className="d-flex align-items-center justify-content-center">
-            <SendOutlined style={{ marginRight: "6px" }} />
-            Deposit
-          </div>
+          {isMutating || isSendingAndConfirm ? <></> : <>
+            <div className="d-flex align-items-center justify-content-center">
+              <SendOutlined style={{ marginRight: "6px" }} />
+              Deposit
+            </div>
+          </>
+          }
         </Button>
       </div>
 

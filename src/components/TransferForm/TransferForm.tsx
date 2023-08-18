@@ -181,13 +181,15 @@ const TransferForm = ({ formProps, onSubmit, isUpdating, type }) => {
             onClick={onSubmit}
             loading={isUpdating}
           >
-            <div className="d-flex align-items-center justify-content-center">
-              {
-                isWithdrawal
-                  ? "Withdraw"
-                  : "Send"
-              }
-            </div>
+            {isUpdating ? <></> : <>
+              <div className="d-flex align-items-center justify-content-center">
+                {
+                  isWithdrawal
+                    ? "Withdraw"
+                    : "Send"
+                }
+              </div>
+            </>}
           </Button>
         </div>
       </Card>
