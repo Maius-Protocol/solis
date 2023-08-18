@@ -41,7 +41,7 @@ const SolisActionsCard = () => {
                 style={{ width: "36px", height: "36px" }}
               />
             </div>
-            <div>Withdrawal</div>
+            <div>Withdraw</div>
           </Button>
           <Button
             onClick={() => {
