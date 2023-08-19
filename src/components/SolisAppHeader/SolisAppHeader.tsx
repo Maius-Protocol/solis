@@ -46,7 +46,9 @@ const SolisAppHeader = () => {
           src={Images.logo}
         />
         <Statistic
-          title={<b style={{ color: "white", fontSize: "20px" }}>Welcome Back!</b>}
+          title={
+            <b style={{ color: "white", fontSize: "20px" }}>Welcome Back!</b>
+          }
           valueRender={() => (
             <div
               style={{
@@ -69,7 +71,11 @@ const SolisAppHeader = () => {
         >
           <YourTotalSavings />
           <Statistic
-            title={<span style={{ color: "white" }}>Today APY</span>}
+            title={
+              <span style={{ color: "white" }}>
+                Today APY ({vaults?.[0]?.symbol})
+              </span>
+            }
             value={vaults?.[0]?.closest_apy}
             precision={2}
             isLoadingVaults={isLoadingVaults}
