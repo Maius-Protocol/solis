@@ -108,12 +108,17 @@ const DepositScreen = () => {
         return (
           <div className="d-flex flex-row">
             <InputNumber
+              style={{ width: "180px" }}
               formatter={(value) => value + "%"}
               onChange={(value) => {
                 setValue(key, value);
               }}
               name={`${key}`}
-              addonAfter={`~${_amount?.toPrecision(4)} ${vault?.symbol}`}
+              addonAfter={
+                <span
+                  style={{ width: "100px", textOverflow: "ellipsis" }}
+                >{`~${_amount?.toPrecision(4)} ${vault?.symbol}`}</span>
+              }
               value={percentage}
               max={record?.symbol === "SOL" ? 99 : 100}
             />
