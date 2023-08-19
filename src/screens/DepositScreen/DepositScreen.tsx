@@ -7,6 +7,8 @@ import {
   Dropdown,
   InputNumber,
   message,
+  Modal,
+  Spin,
   Table,
   Typography,
 } from "antd";
@@ -20,6 +22,9 @@ import { findToken } from "../../constants/token";
 import useSwapAndDeposit from "../../service/useSwapAndDeposit";
 import useSignAndConfirmSolis from "../../service/useSignAndConfirmSolis";
 import { VersionedTransaction } from "@solana/web3.js";
+import DepositAnimation from "./data 2.json";
+import Lottie from "lottie-react";
+import investAnimation from "../WelcomeScreen/animation_lkzt0k06.json";
 const bs58 = require("bs58");
 
 const async = require("async");
@@ -28,6 +33,19 @@ function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 const DepositScreen = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const [messageApi, contextHolder] = message.useMessage();
   const { mutateAsync: sendAndConfirmSolis, isLoading: isSendingAndConfirm } =
     useSignAndConfirmSolis();
@@ -106,6 +124,7 @@ const DepositScreen = () => {
   ];
 
   const onSubmit = async () => {
+    showModal();
     const _response = await mutateAsync({
       swaps: deposit?.map((address) => {
         const formState = getValues();
@@ -128,6 +147,7 @@ const DepositScreen = () => {
       const transaction = VersionedTransaction.deserialize(transactionDecoded);
       return transaction;
     });
+    handleCancel();
     _transactions = await window.xnft.solana.signAllTransactions(_transactions);
     for (const e of _transactions) {
       const serializedTransaction = bs58.encode(
@@ -238,17 +258,48 @@ const DepositScreen = () => {
           onClick={onSubmit}
           loading={isMutating || isSendingAndConfirm}
         >
-          {isMutating || isSendingAndConfirm ? <></> : <>
-            <div className="d-flex align-items-center justify-content-center">
-              <SendOutlined style={{ marginRight: "6px" }} />
-              Deposit
-            </div>
-          </>
-          }
+          {isMutating || isSendingAndConfirm ? (
+            <></>
+          ) : (
+            <>
+              <div className="d-flex align-items-center justify-content-center">
+                <SendOutlined style={{ marginRight: "6px" }} />
+                Deposit
+              </div>
+            </>
+          )}
         </Button>
       </div>
 
       {contextHolder}
+      <Modal
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        closable={false}
+        cancelButtonProps={{
+          style: {
+            visibility: "hidden",
+          },
+        }}
+        okButtonProps={{
+          style: {
+            visibility: "hidden",
+          },
+        }}
+      >
+        <Lottie
+          animationData={DepositAnimation}
+          loop={true}
+          style={{ height: 300 }}
+        />
+        <div className="d-flex flex-column align-items-center justify-content-center">
+          <Spin style={{ marginBottom: "12px" }} />
+          <h4 className="text-center">
+            Building swap & deposit instructions using Jupiter & Meteora...
+          </h4>
+        </div>
+      </Modal>
     </div>
   );
 };

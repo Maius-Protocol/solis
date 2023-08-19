@@ -3,11 +3,13 @@ import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance
 import { useNavigation } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { VersionedTransaction } from "@solana/web3.js";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TransferForm from "../../components/TransferForm/TransferForm";
 import useWithdrawAndTransfer from "../../service/useWithdrawAndTransfer";
+import WithdrawFromMeteora from "../../components/WithdrawFromMeteora";
 
 const SendScreen = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigation = useNavigation();
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
@@ -23,6 +25,7 @@ const SendScreen = () => {
 
   const onSubmit = async () => {
     const { amount, address } = getValues();
+    setIsModalOpen(true);
     const instructions = await createInstructions({
       sender: userWalletAddress!,
       receiver: address,
@@ -32,6 +35,7 @@ const SendScreen = () => {
     const tx = VersionedTransaction.deserialize(
       new Buffer.from(instructions?.data?.data, "base64"),
     );
+    setIsModalOpen(false);
     await window.xnft.solana.sendAndConfirm(tx);
     refetch();
     navigation.goBack();
@@ -44,12 +48,18 @@ const SendScreen = () => {
   }, [vaults]);
 
   return (
-    <TransferForm
-      formProps={formProps}
-      onSubmit={onSubmit}
-      isUpdating={isUpdating}
-      type="transfer"
-    />
+    <>
+      <TransferForm
+        formProps={formProps}
+        onSubmit={onSubmit}
+        isUpdating={isUpdating}
+        type="transfer"
+      />
+      <WithdrawFromMeteora
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
+    </>
   );
 };
 
