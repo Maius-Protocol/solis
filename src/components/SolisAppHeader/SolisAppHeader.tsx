@@ -73,7 +73,7 @@ const SolisAppHeader = () => {
           <Statistic
             title={
               <span style={{ color: "white" }}>
-                Top today APY ({vaults?.[0]?.symbol})
+                Top APY Today ({vaults?.[0]?.symbol})
               </span>
             }
             value={vaults?.[0]?.closest_apy}
