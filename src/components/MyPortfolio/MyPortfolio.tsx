@@ -13,11 +13,16 @@ import { tokenMap } from "../../constants/token";
 import useUserMeteoraVaultBalance from "../../service/useUserMeteoraVaultBalance";
 import { formatTokenAmount } from "../../util/formater";
 import { usePublicKeys } from "../../hooks/xnft-hooks";
+import { ReloadOutlined } from "@ant-design/icons";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MyPortfolio = () => {
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
-  const { data, isRefetching } = useUserMeteoraVaultBalance(userWalletAddress!);
+  const { data, isRefetching, refetch } = useUserMeteoraVaultBalance(
+    userWalletAddress!,
+  );
+
   return (
     <div
       style={{
@@ -27,9 +32,17 @@ const MyPortfolio = () => {
       }}
       className="p-3"
     >
-      <Typography.Title level={4} style={{ marginBottom: "8px" }}>
-        My Portfolio
-      </Typography.Title>
+      <div className="d-flex flex-row align-items-center justify-content-between">
+        <Typography.Title level={4} style={{ marginBottom: "8px" }}>
+          My Portfolio
+        </Typography.Title>
+        <ReloadOutlined
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            refetch();
+          }}
+        />
+      </div>
       <Divider style={{ margin: "12px 0" }} />
       {isRefetching && <Skeleton />}
       {!isRefetching && (
