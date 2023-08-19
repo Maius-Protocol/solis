@@ -13,11 +13,14 @@ import { formatTokenAmount } from "../../util/formater";
 import useWithdrawAndBuyNft from "../../service/useWithdrawAndBuyNft";
 import { useDimensions, usePublicKeys } from "../../hooks/xnft-hooks";
 import { VersionedTransaction } from "@solana/web3.js";
+import { useState } from "react";
+import WithdrawFromMeteora from "../../components/WithdrawFromMeteora";
 
 const NFT = ({ nft }) => {
   const keys = usePublicKeys();
   const userWalletAddress = keys?.solana?.toString();
   const { width, height } = useDimensions();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { mutateAsync: createInstructions, isLoading: isUpdating } =
     useWithdrawAndBuyNft(userWalletAddress);
   return (
@@ -42,6 +45,7 @@ const NFT = ({ nft }) => {
 
             <Button
               onClick={async () => {
+                setIsModalOpen(true)
                 const instructions = await createInstructions({
                   nftPrice: parseInt(nft.price) / 1_000_000_000,
                   nftOwner: nft.seller,
@@ -50,6 +54,7 @@ const NFT = ({ nft }) => {
                 const tx = VersionedTransaction.deserialize(
                   new Buffer.from(instructions?.data?.data, "base64"),
                 );
+                setIsModalOpen(false)
                 window.xnft.solana.sendAndConfirm(tx);
               }}
               type="primary"
@@ -61,6 +66,10 @@ const NFT = ({ nft }) => {
           </div>
         </div>
       </Card>
+      <WithdrawFromMeteora
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </div>
   );
 };
