@@ -1,14 +1,17 @@
-# xnft-quickstart
+# Solis
 
-Quickstart repo for building your own xNFT.
+Solis is an xNFT application built on top of [Backpack](https://www.backpack.app/) that helps users leverage their assets while earning yields.
 
-## Developing
+## How it works
 
-Once you've installed Backpack, get started building your xNFT with these steps. Note that the packages here will always use the latest, which correspond to the latest tagged build of Backpack. If you have unexepected issues, make sure your package versions match the app version.
+When users deposit their assets from Backpack into Solis app, we use [Jupiter](https://jup.ag/) to automatically convert user assets to [Meteora](https://meteora.ag/) token vaults.
 
-Further documentation: https://docs.xnfts.dev/getting-started/getting-started
+User assets after deposit will be automatically monitored and earned yields thanks to Meteora's Dynamic Vaults. After that, users can leverage tokens in vaults to perform on-chain activities such as transferring tokens to other wallets or buying NFTs.
 
-### Install
+## User Flows
+<img src="./docs/solis-user-flows.png" width="650">
+
+## Local development
 
 First, install dependencies.
 
@@ -31,7 +34,7 @@ Now that you have your xNFT dev server running, open it in the Backpack simulato
 That's it!
 
 
-## Build & Publish
+### Build & Publish
 
 Once you're done and ready to publish, build your xNFT:
 
