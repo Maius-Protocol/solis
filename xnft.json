@@ -1,17 +1,19 @@
 {
-  "name": "xNFT Quickstart",
+  "name": "Solis",
   "version": "0.0.1",
-  "storage": "ipfs",
-  "description": "React Native Example",
-  "website": "http://wao.gg",
+  "contact": {
+    "repository": "https://github.com/Maius-Protocol/solis"
+  },
+  "description": "Solis",
+  "website": "http://solis.maius.fun",
   "kind": "app",
   "tag": "nfts",
   "icon": {
-    "md": "./assets/icon.png"
+    "md": "./src/assets/icon.png"
   },
-  "contact": "https://github.com/Maius-Protocol",
   "screenshots": [
-    "./assets/screenShot.png"
+    "./src/assets/screenshot.png",
+    "./src/assets/screenshot_2.png"
   ],
   "entrypoints": {
     "default": {

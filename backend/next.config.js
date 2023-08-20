@@ -19,6 +19,16 @@ const nextConfig = {
     };
     return config;
   },
+
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "https://blog.maius.fun/solis",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
