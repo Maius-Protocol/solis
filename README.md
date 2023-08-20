@@ -16,7 +16,8 @@ User assets after deposit will be automatically monitored and earned yields than
 First, install dependencies.
 
 ```
-yarn
+yarn install // For xNFT app
+cd backend && yarn install // For backend
 ```
 
 ### Run the dev server
@@ -25,6 +26,7 @@ Then, run the dev server with hot reloading
 
 ```
 yarn dev
+cd backend && yarn install
 ```
 
 ### Open the Simulator in Backpack
@@ -47,5 +49,3 @@ Test the newly created build in `dist/index.html` in the simulator:
 ```
 yarn start
 ```
-
-Once everything looks good head over to [xnft.gg](https://www.xnft.gg) to publish your xNFT!
