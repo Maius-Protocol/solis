@@ -2,14 +2,20 @@
 
 Solis is an xNFT application built on top of [Backpack](https://www.backpack.app/) that helps users leverage their assets while earning yields.
 
-## How it works
-
-When users deposit their assets from Backpack into Solis app, we use [Jupiter](https://jup.ag/) to automatically convert user assets to [Meteora](https://meteora.ag/) token vaults.
-
-User assets after deposit will be automatically monitored and earned yields thanks to Meteora's Dynamic Vaults. After that, users can leverage tokens in vaults to perform on-chain activities such as transferring tokens to other wallets or buying NFTs.
+<img src="./docs/solis-ui.png" width="800">
+## Features
+- Earning yields on your idle capital with 1-click
+- Automatically combine and swap multiple tokens before deposit
+- Send tokens and buy NFTs instantly from your savings
 
 ## User Flows
-<img src="./docs/solis-user-flows.png" width="650">
+<img src="./docs/solis-user-flows.png" width="800">
+
+## How it works
+
+When users deposit their assets from [Backpack](https://www.backpack.app/) into Solis app, we use [Jupiter](https://jup.ag/) to automatically convert user assets to [Meteora](https://meteora.ag/) token vaults.
+
+User assets after deposit will be automatically monitored and earned yields thanks to Meteora's Dynamic Vaults. After that, users can leverage tokens in vaults to perform on-chain activities such as transferring tokens to other wallets or buying NFTs.
 
 ## Local development
 
