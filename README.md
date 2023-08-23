@@ -33,7 +33,7 @@ Then, run the dev server with hot reloading
 
 ```
 yarn dev
-cd backend && yarn install
+cd backend && yarn dev
 ```
 
 ### Open the Simulator in Backpack
