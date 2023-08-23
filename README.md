@@ -2,7 +2,8 @@
 
 Solis is an xNFT application built on top of [Backpack](https://www.backpack.app/) that helps users leverage their assets while earning yields.
 
-<img src="./docs/solis-ui.png" width="800">
+<img src="./docs/solis-ui.jpg" width="800">
+
 ## Features
 - Earning yields on your idle capital with 1-click
 - Automatically combine and swap multiple tokens before deposit
